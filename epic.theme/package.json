@@ -1,0 +1,45 @@
+{
+  "name": "epic.theme",
+  "version": "1.0.8",
+  "main": "dist/epic.theme.umd.js",
+  "module": "dist/epic.theme.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "keywords": [],
+  "author": "Nitheesh Ganesh <nitheesh.ganesh@aot-technologies.com>",
+  "license": "MIT",
+  "description": "Theme config package to be used across multiple EPIC repositories",
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.16.0",
+    "@mui/system": "^5.16.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "vite-plugin-dts": "^3.9.1",
+    "vite-plugin-lib-inject-css": "^2.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bcgov/EPIC.themeLib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bcgov/EPIC.themeLib/issues"
+  },
+  "homepage": "https://github.com/bcgov/EPIC.themeLib#readme"
+}

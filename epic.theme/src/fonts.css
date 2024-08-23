@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'BC Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BC Sans'), url('./fonts/BCSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BC Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('BC Sans'), url('./fonts/BCSans-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BC Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('BC Sans Bold'), url('./fonts/BCSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BC Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('BC Sans Bold'), url('./fonts/BCSans-BoldItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BC Sans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('BCSans Light'), url('./fonts/BCSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BC Sans';
+  font-style: italic;
+  font-weight: 100;
+  src: local('BCSans Light'), url('./fonts/BCSans-LightItalic.woff2') format('woff2');
+}
