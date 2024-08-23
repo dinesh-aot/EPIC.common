@@ -7,14 +7,14 @@ on:
     paths:
       - "epic.theme/**"
 
-defaults:
-  run:
-    shell: bash
-    working-directory: ./epic.theme
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./epic.theme
 
     steps:
       - name: Checkout code
