@@ -1,6 +1,6 @@
 import { Components } from "@mui/material";
 import { Palette } from "./palette";
-import { color, display, fontWeight, lineHeight } from "@mui/system";
+import { color, display, fontWeight, lineHeight, padding } from "@mui/system";
 import { BCDesignTokens } from "./designTokens";
 
 const activeBorder = {
@@ -294,7 +294,6 @@ export const ComponentStyles: Components = {
     styleOverrides: {
       root: {
         "& .MuiInputBase-root": {
-          height: "2.5rem",
           fontSize: BCDesignTokens.typographyFontSizeBody,
           color: BCDesignTokens.typographyColorPrimary,
           backgroundColor: BCDesignTokens.surfaceColorFormsDefault,
@@ -304,25 +303,32 @@ export const ComponentStyles: Components = {
           boxShadow: "none",
           transition:
             "border-color .15s ease-in-out, box-shadow .15s ease-in-out",
+          ":hover": {
+            borderColor: BCDesignTokens.surfaceColorBorderDark,
+          },
+          ":active": {
+            ...activeBorder,
+            ...{
+              borderColor: BCDesignTokens.surfaceColorBorderDark,
+            },
+          },
+          ":focus-within": {
+            borderColor: BCDesignTokens.surfaceColorBorderActive,
+          },
+          ".MuiInputBase-input": {
+            padding: "7px 12px",
+            height: "24px",
+          },
+          fieldset: {
+            display: "none",
+          },
+          "MuiInputAdornment-root": {
+            color: BCDesignTokens.typographyColorPrimary,
+          },
         },
         "& .MuiInputBase-root.MuiInputBase-sizeSmall": {
           height: "2.25rem",
           fontSize: BCDesignTokens.typographyFontSizeSmallBody,
-        },
-        "& .MuiInputBase-root:hover": {
-          borderColor: BCDesignTokens.surfaceColorBorderDark,
-        },
-        "& .MuiInputBase-root:active": {
-          ...activeBorder,
-          ...{
-            borderColor: BCDesignTokens.surfaceColorBorderDark,
-          },
-        },
-        "& .MuiInputBase-root:focus-within": {
-          borderColor: BCDesignTokens.surfaceColorBorderActive,
-        },
-        "& .MuiInputBase-root fieldset": {
-          display: "none",
         },
         "& .MuiInputBase-root.Mui-error": {
           borderColor: BCDesignTokens.typographyColorDanger,
@@ -336,14 +342,11 @@ export const ComponentStyles: Components = {
           position: "static",
           transform: "none",
           fontSize: "0.875rem",
-          lineHeight: "21px",
+          lineHeight: "1.5rem",
           color: BCDesignTokens.typographyColorSecondary,
         },
         "& .MuiInputLabel-shrink": {
           transform: "none",
-        },
-        "& .MuiInputBase-root MuiInputAdornment-root": {
-          color: BCDesignTokens.typographyColorPrimary,
         },
         "& .MuiFormHelperText-root": {
           fontSize: "0.875rem",
@@ -359,10 +362,22 @@ export const ComponentStyles: Components = {
       size: "medium",
     },
   },
+  MuiAutocomplete: {
+    styleOverrides: {
+      root: {
+        "& .MuiAutocomplete-inputRoot": {
+          padding: "7px 12px",
+          ".MuiAutocomplete-input": {
+            padding: "0 !important",
+          }
+        }
+      },
+    },
+  },
   MuiFormControl: {
     styleOverrides: {
       root: {
-        marginBottom: "1rem",
+        marginBottom: "1.5rem",
       },
     },
   },
@@ -374,7 +389,7 @@ export const ComponentStyles: Components = {
   MuiIconButton: {
     styleOverrides: {
       root: {
-        color: BCDesignTokens.iconsColorPrimary
+        color: BCDesignTokens.iconsColorPrimary,
       },
     },
   },
