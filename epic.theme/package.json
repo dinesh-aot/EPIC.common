@@ -1,6 +1,6 @@
 {
   "name": "epic.theme",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/epic.theme.umd.js",
   "module": "dist/epic.theme.es.js",
   "types": "dist/index.d.ts",

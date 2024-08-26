@@ -1,6 +1,4 @@
 import { Components } from "@mui/material";
-import { Palette } from "./palette";
-import { color, display, fontWeight, lineHeight, padding } from "@mui/system";
 import { BCDesignTokens } from "./designTokens";
 
 const activeBorder = {
@@ -235,15 +233,6 @@ export const ComponentStyles: Components = {
       color: "primary",
       disableRipple: true,
     },
-    variants: [
-      {
-        props: { variant: "dashed" },
-        style: {
-          textTransform: "none",
-          border: `2px dashed ${Palette.primary.accent.light}`,
-        },
-      },
-    ],
   },
   MuiRadio: {
     defaultProps: {
@@ -252,7 +241,7 @@ export const ComponentStyles: Components = {
     styleOverrides: {
       root: {
         "&.Mui-checked": {
-          color: Palette.primary.accent.main,
+          color: BCDesignTokens.themeBlue90,
         },
       },
     },
@@ -261,21 +250,21 @@ export const ComponentStyles: Components = {
     styleOverrides: {
       root: {
         "&.MuiOutlinedInput-root": {
-          backgroundColor: Palette.white,
+          backgroundColor: BCDesignTokens.surfaceColorBackgroundWhite,
           "&.Mui-disabled": {
-            backgroundColor: Palette.neutral.bg.dark,
+            backgroundColor: BCDesignTokens.themeGray90,
           },
           "& fieldset": {
-            border: `2px solid ${Palette.neutral.accent.light}`,
+            border: `2px solid ${BCDesignTokens.themeGray60}`,
           },
           "&:hover fieldset": {
-            borderColor: Palette.primary.accent.light,
+            borderColor: BCDesignTokens.themeBlue70,
           },
           "&.Mui-focused fieldset": {
-            borderColor: Palette.primary.accent.light,
+            borderColor: BCDesignTokens.themeBlue70,
           },
           "&.Mui-disabled fieldset": {
-            borderColor: Palette.neutral.accent.light,
+            borderColor: BCDesignTokens.themeGray60,
           },
         },
       },
@@ -285,7 +274,7 @@ export const ComponentStyles: Components = {
     styleOverrides: {
       root: {
         "&.Mui-disabled svg": {
-          fill: `${Palette.neutral.bg.dark} !important`,
+          fill: `${BCDesignTokens.themeGray90} !important`,
         },
       },
     },
@@ -369,8 +358,34 @@ export const ComponentStyles: Components = {
           padding: "7px 12px",
           ".MuiAutocomplete-input": {
             padding: "0 !important",
-          }
-        }
+          },
+          ".MuiAutocomplete-tag": {
+            // border: `1px solid ${BCDesignTokens.surfaceColorBorderDark}`,
+            boxShadow: `0px 0px 0px 1px ${BCDesignTokens.surfaceColorBorderDark}`,
+            borderRadius: BCDesignTokens.layoutBorderRadiusSmall,
+            backgroundColor: BCDesignTokens.themeGray20,
+            height: "1.5rem",
+            font: BCDesignTokens.typographyRegularLabel,
+            padding: "0 0.5rem",
+            display: "flex",
+            alignItems: "center",
+            ".MuiChip-label": {
+              padding: 0,
+            },
+            ".MuiChip-deleteIcon": {
+              fontSize: "1.25rem",
+              margin: "0 -0.25rem 0 0.25rem",
+              color: BCDesignTokens.iconsColorPrimary,
+            },
+          },
+          "& .MuiAutocomplete-tag:nth-of-type(-n + 2)": {
+            margin: "0",
+            marginRight: "4px",
+          },
+          "& .MuiAutocomplete-tag:nth-of-type(n + 3)": {
+            margin: "4px 4px 0 0"
+          },
+        },
       },
     },
   },
@@ -401,8 +416,8 @@ export const ComponentStyles: Components = {
   MuiTooltip: {
     styleOverrides: {
       tooltip: {
-        backgroundColor: Palette.neutral.accent.dark,
-        color: Palette.white,
+        backgroundColor: BCDesignTokens.themeGray90,
+        color: BCDesignTokens.themeGrayWhite,
         borderRadius: "4px",
         padding: "4px 8px",
         fontSize: "0.75rem",
@@ -414,7 +429,7 @@ export const ComponentStyles: Components = {
         textAlign: "center",
       },
       tooltipArrow: {
-        backgroundColor: Palette.neutral.accent.dark,
+        backgroundColor: BCDesignTokens.themeGray90,
       },
     },
   },
@@ -424,6 +439,30 @@ export const ComponentStyles: Components = {
         fontSize: "1rem",
       },
     },
+  },
+  MuiChip: {
+    styleOverrides: {
+      root: {
+        borderRadius: BCDesignTokens.layoutBorderRadiusSmall,
+        color: BCDesignTokens.typographyColorPrimary
+      },
+      colorSuccess: {
+        borderColor: BCDesignTokens.supportBorderColorSuccess,
+        backgroundColor: BCDesignTokens.supportSurfaceColorSuccess,
+      },
+      colorError: {
+        borderColor: BCDesignTokens.supportBorderColorDanger,
+        backgroundColor: BCDesignTokens.supportSurfaceColorDanger,
+      },
+      colorWarning: {
+        borderColor: BCDesignTokens.supportBorderColorWarning,
+        backgroundColor: BCDesignTokens.supportSurfaceColorWarning,
+      },
+      colorInfo: {
+        borderColor: BCDesignTokens.supportBorderColorInfo,
+        backgroundColor: BCDesignTokens.supportSurfaceColorInfo,
+      },
+    }
   },
   MuiCssBaseline: {
     styleOverrides: {
