@@ -311,7 +311,7 @@ export const ComponentStyles: Components = {
           fieldset: {
             display: "none",
           },
-          "MuiInputAdornment-root": {
+          ".MuiInputAdornment-root": {
             color: BCDesignTokens.typographyColorPrimary,
           },
         },
@@ -319,11 +319,18 @@ export const ComponentStyles: Components = {
           height: "2.25rem",
           fontSize: BCDesignTokens.typographyFontSizeSmallBody,
         },
+        "& .MuiInputBase-root.MuiInputBase-multiline": {
+          padding: 0,
+          borderColor: BCDesignTokens.surfaceColorBorderMedium,
+          ".MuiInputBase-inputMultiline": {
+            resize: "vertical"
+          }
+        },
         "& .MuiInputBase-root.Mui-error": {
           borderColor: BCDesignTokens.typographyColorDanger,
         },
         "& .MuiInputBase-root.Mui-disabled": {
-          backgroundColor: BCDesignTokens.surfaceColorFormsDisabled,
+          backgroundColor: `${BCDesignTokens.surfaceColorFormsDisabled} !important`,
           outline: "none",
           borderColor: BCDesignTokens.surfaceColorBorderDefault,
         },
