@@ -52,4 +52,3 @@ thrift==0.20.0
 tornado==6.4.1
 typing_extensions==4.12.2
 urllib3==2.2.2
--e git+https://github.com/bcgov/EPIC.track.git#egg=epictrack-api&subdirectory=epictrack-api
