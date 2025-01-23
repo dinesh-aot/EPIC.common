@@ -66,12 +66,12 @@ class _Config():  # pylint: disable=too-few-public-methods
     DEBUG = False
 
     # POSTGRESQL
-    DB_USER = os.getenv('DATABASE_USERNAME', '')
-    DB_PASSWORD = os.getenv('DATABASE_PASSWORD', '')
-    DB_NAME = os.getenv('DATABASE_NAME', '')
-    DB_HOST = os.getenv('DATABASE_HOST', '')
-    DB_PORT = os.getenv('DATABASE_PORT', '5432')
-    SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{int(DB_PORT)}/{DB_NAME}'
+    TRACK_DB_USER = os.getenv('TRACK_DATABASE_USERNAME', '')
+    TRACK_DB_PASSWORD = os.getenv('TRACK_DATABASE_PASSWORD', '')
+    TRACK_DB_NAME = os.getenv('TRACK_DATABASE_NAME', '')
+    TRACK_DB_HOST = os.getenv('TRACK_DATABASE_HOST', '')
+    TRACK_DB_PORT = os.getenv('TRACK_DATABASE_PORT', '5432')
+    TRACK_DATABASE_URI = f'postgresql://{TRACK_DB_USER}:{TRACK_DB_PASSWORD}@{TRACK_DB_HOST}:{int(TRACK_DB_PORT)}/{TRACK_DB_NAME}'
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -85,25 +85,18 @@ class _Config():  # pylint: disable=too-few-public-methods
         f"postgresql://{COMPLIANCE_DB_USER}:{COMPLIANCE_DB_PASSWORD}@{COMPLIANCE_DB_HOST}:{int(COMPLIANCE_DB_PORT)}/{COMPLIANCE_DB_NAME}"
     )
 
+    # SUBMIT DB Configuration
+    SUBMIT_DB_USER = os.getenv("SUBMIT_DATABASE_USERNAME", "")
+    SUBMIT_DB_PASSWORD = os.getenv("SUBMIT_DATABASE_PASSWORD", "")
+    SUBMIT_DB_NAME = os.getenv("SUBMIT_DATABASE_NAME", "")
+    SUBMIT_DB_HOST = os.getenv("SUBMIT_DATABASE_HOST", "")
+    SUBMIT_DB_PORT = os.getenv("SUBMIT_DATABASE_PORT", "5432")
+    SUBMIT_DATABASE_URI = (
+        f"postgresql://{SUBMIT_DB_USER}:{SUBMIT_DB_PASSWORD}@{SUBMIT_DB_HOST}:{int(SUBMIT_DB_PORT)}/{SUBMIT_DB_NAME}"
+    )
 
-    # JWT_OIDC Settings
-    JWT_OIDC_WELL_KNOWN_CONFIG = os.getenv('JWT_OIDC_WELL_KNOWN_CONFIG')
-    JWT_OIDC_ALGORITHMS = os.getenv('JWT_OIDC_ALGORITHMS', 'RS256')
-    JWT_OIDC_JWKS_URI = os.getenv('JWT_OIDC_JWKS_URI')
-    JWT_OIDC_ISSUER = os.getenv('JWT_OIDC_ISSUER')
-    JWT_OIDC_AUDIENCE = os.getenv('JWT_OIDC_AUDIENCE', 'account')
-    JWT_OIDC_CACHING_ENABLED = os.getenv('JWT_OIDC_CACHING_ENABLED', 'True')
-    JWT_OIDC_JWKS_CACHE_TIMEOUT = 300
-
-    # Service account details
-    KEYCLOAK_BASE_URL = os.getenv('KEYCLOAK_BASE_URL')
-    KEYCLOAK_REALMNAME = os.getenv('KEYCLOAK_REALMNAME', 'submit')
-    KEYCLOAK_SERVICE_ACCOUNT_ID = os.getenv('MET_ADMIN_CLIENT_ID')
-    KEYCLOAK_SERVICE_ACCOUNT_SECRET = os.getenv('MET_ADMIN_CLIENT_SECRET')
-    # TODO separate out clients for APIs and user management.
-    # TODO API client wont need user management roles in keycloak.
-    KEYCLOAK_ADMIN_USERNAME = os.getenv('MET_ADMIN_CLIENT_ID')
-    KEYCLOAK_ADMIN_SECRET = os.getenv('MET_ADMIN_CLIENT_SECRET')
+    # Debug logging for detailed logs in Project Extractor
+    ENABLE_DETAILED_LOGS = os.getenv("ENABLE_DETAILED_LOGS", "false").lower() == "true"
 
 
 class DevConfig(_Config):  # pylint: disable=too-few-public-methods
@@ -111,7 +104,7 @@ class DevConfig(_Config):  # pylint: disable=too-few-public-methods
 
     TESTING = False
     DEBUG = True
-    print(f'SQLAlchemy URL (DevConfig): {_Config.SQLALCHEMY_DATABASE_URI}')
+    print(f'SQLAlchemy URL (DevConfig): {_Config.TRACK_DATABASE_URI}')
 
 
 class TestConfig(_Config):  # pylint: disable=too-few-public-methods
