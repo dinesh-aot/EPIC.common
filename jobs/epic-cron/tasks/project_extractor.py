@@ -29,7 +29,7 @@ class ProjectExtractor:
         required_fields = ["id", "name", "epic_guid", "proponent_name", "proponent_id", "ea_certificate"]
         # Step 1: Fetch data from track.projects
         track_data = cls._fetch_track_data(track_session, required_fields)
-
+        return
         # Step 2: Clear the target database of existing records
         cls._clear_target_db(target_session, target_model, target_system)
 
