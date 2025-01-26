@@ -1,4 +1,4 @@
-FROM python:3.8.5-buster
+FROM python:3.10-buster
 
 # ========================================================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
@@ -30,7 +30,7 @@ ARG user=pay
 RUN useradd -U -ms /bin/bash -u $uid $user \
     && usermod -a -G root $user
 
-ENV HOME=/epic-cron
+ENV HOME=/submit-cron
 
 RUN mkdir $HOME && chmod 755 $HOME
 
@@ -47,7 +47,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install .
 
 # Set Python path
-ENV PYTHONPATH=/epic-cron/src
+ENV PYTHONPATH=/submit-cron/src
 
 
 # Set ownership and permissions
