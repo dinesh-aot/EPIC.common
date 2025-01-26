@@ -17,7 +17,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: .job/epic-cron
+    working-directory: ./job/epic-cron
 
 env:
   APP_NAME: "epic-cron"
