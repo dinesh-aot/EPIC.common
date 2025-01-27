@@ -18,7 +18,7 @@ class TrackService:
         """
         # Get the Track API base URL and endpoint
         track_api_base_url = current_app.config.get("TRACK_API_BASE_URL")
-        track_projects_endpoint = f"{track_api_base_url}/api/v1/projects?return_type=LIST_TYPE&with_works=true"
+        track_projects_endpoint = f"{track_api_base_url}/api/v1/projects?return_type=LIST_TYPE&with_works=false"
 
         # Fetch the Bearer token
         token = TrackService._get_admin_token()
