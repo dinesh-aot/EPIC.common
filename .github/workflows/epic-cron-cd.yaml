@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "epic-cron/**"
+      - "jobs/epic-cron/**"
   workflow_dispatch:
     inputs:
       environment:
