@@ -92,7 +92,6 @@ class TrackService:
 
             # Parse and return the access token
             access_token = response.json().get("access_token")
-            print('-access_token---',access_token)
             if not access_token:
                 raise Exception("Keycloak response did not include an access token.")
             return access_token
