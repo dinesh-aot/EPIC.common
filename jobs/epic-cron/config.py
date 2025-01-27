@@ -98,6 +98,14 @@ class _Config():  # pylint: disable=too-few-public-methods
     # Debug logging for detailed logs in Project Extractor
     ENABLE_DETAILED_LOGS = os.getenv("ENABLE_DETAILED_LOGS", "false").lower() == "true"
 
+    TRACK_API_BASE_URL=os.getenv('TRACK_API_BASE_URL')
+    KEYCLOAK_BASE_URL = os.getenv('KEYCLOAK_BASE_URL')
+    KEYCLOAK_REALM_NAME = os.getenv('KEYCLOAK_REALM_NAME', 'eao-epic')
+    KEYCLOAK_SERVICE_ACCOUNT_ID = os.getenv('KEYCLOAK_SERVICE_ACCOUNT_ID')
+    KEYCLOAK_SERVICE_ACCOUNT_SECRET = os.getenv('KEYCLOAK_SERVICE_ACCOUNT_SECRET')
+    # TODO separate out clients for APIs and user management.
+    # TODO API client wont need user management roles in keycloak.
+
 
 class DevConfig(_Config):  # pylint: disable=too-few-public-methods
     """Dev Config."""

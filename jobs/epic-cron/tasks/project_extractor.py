@@ -7,6 +7,7 @@ from sqlalchemy import MetaData, Table, select
 from submit_api.models.project import Project as SubmitProjectModel
 
 from epic_cron.models.db import init_db, init_submit_db, init_compliance_db  # Function that initializes DB engines
+from epic_cron.services.track_service import TrackService
 
 
 class TargetSystem(Enum):
@@ -24,12 +25,12 @@ class ProjectExtractor:
 
         # Initialize source and target database sessions
         print("Initializing database sessions...")
-        track_session = init_db(current_app)
+        # track_session = init_db(current_app)
         target_session, target_model = cls._get_target_config(target_system)
-        required_fields = ["id", "name", "epic_guid", "proponent_name", "proponent_id", "ea_certificate"]
+
         # Step 1: Fetch data from track.projects
-        track_data = cls._fetch_track_data(track_session, required_fields)
-        return
+        track_data = TrackService.fetch_projects()
+
         # Step 2: Clear the target database of existing records
         cls._clear_target_db(target_session, target_model, target_system)
 
@@ -144,8 +145,7 @@ class ProjectExtractor:
         with target_session() as session:
             successful_inserts = 0
             failed_inserts = 0
-            for index, row in enumerate(track_data):
-                project_dict = dict(row._mapping)
+            for index, project_dict in enumerate(track_data):
                 debug_logs_enabled = current_app.config.get("ENABLE_DETAILED_LOGS", False)
                 if debug_logs_enabled:
                     print(f"Inserting project {index + 1}/{len(track_data)}: {project_dict}")
@@ -158,7 +158,6 @@ class ProjectExtractor:
                             proponent_id=project_dict.get("proponent_id"),
                             proponent_name=project_dict.get("proponent_name"),
                             ea_certificate=project_dict.get("ea_certificate")
-
                         )
                     else:
                         project_instance = target_model(
@@ -178,12 +177,13 @@ class ProjectExtractor:
 
                 except Exception as e:
                     failed_inserts += 1
-                    print(f"\n*** FAILED TO INSERT PROJECT {project_dict['id']} ***")
+                    print(f"\n*** FAILED TO INSERT PROJECT {project_dict.get('id')} ***")
                     print(f"Error Details: {e}")
                     print(f"Failed Data: {project_dict}\n")
                     session.rollback()
 
             print(
-                f"Summary: Inserted {successful_inserts} records successfully into the {target_system.value} database.")
+                f"Summary: Inserted {successful_inserts} records successfully into the {target_system.value} database."
+            )
             if failed_inserts > 0:
                 print(f"Summary: Failed to insert {failed_inserts} records into the {target_system.value} database.")
