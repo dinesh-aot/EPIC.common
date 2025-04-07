@@ -6,7 +6,7 @@ class VirusScanner:
 
     @staticmethod
     def scan_file_from_path(file_path: str):
-        print(f"🧪 Scanning file: {file_path}")
+        print(f"Scanning file: {file_path}")
         try:
             with open(file_path, "rb") as f:
                 data = f.read()
