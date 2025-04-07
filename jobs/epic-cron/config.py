@@ -106,6 +106,8 @@ class _Config():  # pylint: disable=too-few-public-methods
     # TODO separate out clients for APIs and user management.
     # TODO API client wont need user management roles in keycloak.
 
+    CLAMAV_HOST = os.getenv('CLAMAV_HOST')
+    CLAMAV_PORT = os.getenv('CLAMAV_PORT')
 
 class DevConfig(_Config):  # pylint: disable=too-few-public-methods
     """Dev Config."""
