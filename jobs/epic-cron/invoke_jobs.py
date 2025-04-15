@@ -5,6 +5,7 @@ from flask import Flask
 from utils.logger import setup_logging
 import config
 from tasks.project_extractor import ProjectExtractor, TargetSystem  # Import the enum
+from tasks.virus_scanner import VirusScanner
 
 setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
 
@@ -33,34 +34,47 @@ def register_shellcontext(app):
     app.shell_context_processor(shell_context)
 
 
-def run(job_name, target_system):
+def run(job_name, target_system=None, file_path=None):
     """Main function to run the job."""
-    # Create the Flask app
     application = create_app()
 
-    # Push the app context to ensure the Flask app is available during task execution
     with application.app_context():
         if job_name == 'EXTRACT_PROJECT':
             print(f'Running Project Extractor for {target_system.value}...')
             ProjectExtractor.do_sync(target_system=target_system)
             application.logger.info(f'<<<< Completed Project Sync for {target_system.value} >>>')
+
+        elif job_name == 'SCAN_VIRUS':
+            print(f'Running Virus Scanner on: {file_path}')
+            VirusScanner.scan_file_from_path(file_path)
+            application.logger.info(f'<<<< Completed Virus Scan for {file_path} >>>')
+
         else:
             application.logger.debug('No valid job_name passed. Exiting without running any tasks.')
 
 
+
 if __name__ == "__main__":
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Run Project Extractor jobs.")
-    parser.add_argument(
-        'target_system',
-        type=str,
-        choices=[system.value for system in TargetSystem],
-        help="Target system for the job (e.g., SUBMIT or COMPLIANCE)"
-    )
-    args = parser.parse_args()
+    # No flags, just positional args
+    args = sys.argv[1:]
 
-    # Map the string argument to the TargetSystem enum
-    target_system = TargetSystem(args.target_system)
+    if not args:
+        print("ERROR: You must provide either a target system (SUBMIT/COMPLIANCE) or 'SCAN_VIRUS' + file path.")
+        sys.exit(1)
 
-    # Run the job
-    run('EXTRACT_PROJECT', target_system)
+    if args[0] == "SCAN_VIRUS":
+        if len(args) < 2:
+            print("ERROR: You must provide a file path for SCAN_VIRUS.")
+            sys.exit(1)
+        file_path = args[1]
+        run("SCAN_VIRUS", target_system=None, file_path=file_path)
+
+    else:
+        # Assume EXTRACT_PROJECT with target_system
+        try:
+            target_system = TargetSystem(args[0])
+            run("EXTRACT_PROJECT", target_system)
+        except ValueError:
+            print(f"ERROR: Invalid target system '{args[0]}'. Must be one of {[ts.value for ts in TargetSystem]}")
+            sys.exit(1)
+

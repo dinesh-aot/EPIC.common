@@ -1,0 +1,13 @@
+# this exposes clamav service
+apiVersion: porter.devops.gov.bc.ca/v1alpha1
+kind: TransportServerClaim
+metadata:
+  name: clamav-tsc
+  namespace: 6cdc9e-prod
+spec:
+  monitor:
+    interval: 10
+    timeout: 10
+    type: tcp
+  service: clamav
+  servicePort: 3310
