@@ -95,6 +95,16 @@ class _Config():  # pylint: disable=too-few-public-methods
         f"postgresql://{SUBMIT_DB_USER}:{SUBMIT_DB_PASSWORD}@{SUBMIT_DB_HOST}:{int(SUBMIT_DB_PORT)}/{SUBMIT_DB_NAME}"
     )
 
+    # CONDITION DB Configuration
+    CONDITION_DB_USER = os.getenv("CONDITION_DATABASE_USERNAME", "")
+    CONDITION_DB_PASSWORD = os.getenv("CONDITION_DATABASE_PASSWORD", "")
+    CONDITION_DB_NAME = os.getenv("CONDITION_DATABASE_NAME", "")
+    CONDITION_DB_HOST = os.getenv("CONDITION_DATABASE_HOST", "")
+    CONDITION_DB_PORT = os.getenv("CONDITION_DATABASE_PORT", "5432")
+    CONDITION_DATABASE_URI = (
+        f"postgresql://{CONDITION_DB_USER}:{CONDITION_DB_PASSWORD}@{CONDITION_DB_HOST}:{int(CONDITION_DB_PORT)}/{CONDITION_DB_NAME}"
+    )
+
     # Debug logging for detailed logs in Project Extractor
     ENABLE_DETAILED_LOGS = os.getenv("ENABLE_DETAILED_LOGS", "false").lower() == "true"
 
