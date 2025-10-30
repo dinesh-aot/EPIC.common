@@ -25,3 +25,8 @@ def init_submit_db(app):
     """Initialize the session for the Submit database."""
     print("Initializing Submit database...")
     return create_session(app.config['SUBMIT_DATABASE_URI'])
+
+def init_conditions_db(app):
+    """Initialize the session for the Con Repo database."""
+    print("Initializing  conditions database...")
+    return create_session(app.config['CONDITIONS_DATABASE_URI'])

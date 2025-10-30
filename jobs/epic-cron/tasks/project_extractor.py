@@ -4,14 +4,17 @@ from enum import Enum
 from compliance_api.models.project import Project as ComplianceProjectModel
 from flask import current_app
 from submit_api.models.project import Project as SubmitProjectModel
+from condition_api.models.project import Project as ConditionProjectModel
 
-from epic_cron.models.db import init_db, init_submit_db, init_compliance_db  # Function that initializes DB engines
+from epic_cron.models.db import init_db, init_submit_db, init_compliance_db, \
+    init_conditions_db  # Function that initializes DB engines
 from epic_cron.services.track_service import TrackService
 
 
 class TargetSystem(Enum):
     SUBMIT = "SUBMIT"
     COMPLIANCE = "COMPLIANCE"
+    CONDITIONS = "CONDITIONS"
 
 
 class ProjectExtractor:
@@ -42,6 +45,8 @@ class ProjectExtractor:
         """Get the target database session, model, and required fields based on the target system."""
         if target_system == TargetSystem.SUBMIT:
             return init_submit_db(current_app), SubmitProjectModel
+        if target_system == TargetSystem.CONDITIONS:
+            return init_conditions_db(current_app), ConditionProjectModel
         return init_compliance_db(current_app), ComplianceProjectModel
 
     @staticmethod
@@ -129,6 +134,18 @@ class ProjectExtractor:
                             proponent_id=project_dict.get("proponent_id"),
                             proponent_name=project_dict.get("proponent_name"),
                             ea_certificate=project_dict.get("ea_certificate")
+                        )
+                    elif target_system == TargetSystem.CONDITIONS:
+                        # con repo uses epic_guid as project_id
+                        con_project_id = project_dict.get("epic_guid") or str(project_dict["id"])
+                        project_instance = target_model(
+                            project_id=con_project_id,
+                            project_name=project_dict["name"],
+                            project_type=(project_dict.get("type_name") or "").strip(),
+                            created_date=datetime.utcnow(),
+                            updated_date=datetime.utcnow(),
+                            created_by="cronjob",
+                            updated_by="cronjob",
                         )
                     else:
                         project_instance = target_model(
