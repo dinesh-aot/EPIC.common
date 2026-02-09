@@ -36,18 +36,18 @@ spec:
             - name: TRACK_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
+                  name: epictrack-patroni
                   key: app-db-username
             - name: TRACK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
+                  name: epictrack-patroni
                   key: app-db-password
             - name: TRACK_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
-                  key: app-db-username
+                  name: epictrack-patroni
+                  key: app-db-name
             - name: TRACK_DATABASE_HOST
               value: "{{ .Values.TRACK.database.host }}"
             - name: TRACK_DATABASE_PORT
@@ -56,18 +56,18 @@ spec:
             - name: SUBMIT_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-name
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_USERNAME
             - name: SUBMIT_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-password
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_PASSWORD
             - name: SUBMIT_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-name
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_NAME
             - name: SUBMIT_DATABASE_HOST
               value: "{{ .Values.SUBMIT.database.host }}"
             - name: SUBMIT_DATABASE_PORT
@@ -92,6 +92,66 @@ spec:
               value: "{{ .Values.COMPLIANCE.database.host }}"
             - name: COMPLIANCE_DATABASE_PORT
               value: "{{ .Values.COMPLIANCE.database.port }}"
+
+            - name: CENTRE_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_USERNAME
+            - name: CENTRE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_PASSWORD
+            - name: CENTRE_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_NAME
+            - name: CENTRE_DATABASE_HOST
+              value: "{{ .Values.CENTRE.database.host }}"
+            - name: CENTRE_DATABASE_PORT
+              value: "{{ .Values.CENTRE.database.port }}"
+
+            - name: CHES_TOKEN_ENDPOINT
+              value: "{{ .Values.CHES.tokenEndpoint }}"
+            - name: CHES_BASE_URL
+              value: "{{ .Values.CHES.apiEndpoint }}"
+            - name: CHES_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CHES_CLIENT_ID
+            - name: CHES_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CHES_CLIENT_SECRET
+
+            - name: WEB_URL
+              value: "{{ .Values.SUBMIT.web.url }}"
+            - name: SENDER_EMAIL
+              value: "{{ .Values.SUBMIT.sender.email }}"
+            - name: STAFF_SUPPORT_MAIL_ID
+              value: "{{ .Values.SUBMIT.staffSupportMailId }}"
+
+            - name: KEYCLOAK_BASE_URL
+              value: "https://dev.loginproxy.gov.bc.ca/auth"
+            - name: KEYCLOAK_REALM_NAME
+              value: "eao-epic"
+            - name: KEYCLOAK_SERVICE_ACCOUNT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: KEYCLOAK_SERVICE_ACCOUNT_ID
+            - name: KEYCLOAK_SERVICE_ACCOUNT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: KEYCLOAK_SERVICE_ACCOUNT_SECRET
+
+            - name: CONDITION_API_BASE_URL
+              value: "https://epic-dev.apps.silver.devops.gov.bc.ca/api/v1/condition"
 
           resources:
             requests:

@@ -1,2 +1,10 @@
-* * * * * default cd /epic-cron && ./run_project_cron.sh
+# PROJECT EXTRACTORS
+0 1 * * * default cd /epic-cron && ./run_project_cron_submit.sh
+0 3 * * * default cd /epic-cron && ./run_project_cron_compliance.sh
+# SUBMIT EMAILER - Runs every 5 minutes
+*/5 * * * * default cd /epic-cron && ./run_emailer.sh
+# CENTRE EMAILER - Runs every 5 minutes
+*/5 * * * * default cd /epic-cron && ./run_centre_emailer.sh
+# SYNC APPROVED CONDITION - Runs at 5pm on weekdays
+0 17 * * 1-5 default cd /epic-cron && ./run_approved_condition.sh
 # An empty line is required at the end of this file for a valid cron file

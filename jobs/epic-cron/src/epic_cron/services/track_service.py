@@ -11,11 +11,11 @@ class TrackService:
     @staticmethod
     def fetch_track_data():
         """Fetch and log data from the track.projects table, joining with proponents."""
-        print("Fetching data from track database...")
+        current_app.logger.info("Fetching data from track database...")
 
         required_fields = [
             "id", "name", "epic_guid", "proponent_name",
-            "proponent_id", "ea_certificate", "type_name"
+            "proponent_id", "ea_certificate", "type_name", "is_deleted", "is_active"
         ]
 
         track_session = init_db(current_app)
@@ -26,7 +26,7 @@ class TrackService:
             track_proponents_table = Table('proponents', track_metadata, autoload_with=session.bind)
             track_types_table = Table('types', track_metadata, autoload_with=session.bind)
 
-            print(f"Selecting required fields: {required_fields} and joining with proponents...")
+            current_app.logger.info(f"Selecting required fields: {required_fields} and joining with proponents...")
             # Join projects with proponents to get proponent name
             query = (
                 select(
@@ -38,12 +38,10 @@ class TrackService:
                 .outerjoin(track_types_table, track_projects_table.c.type_id == track_types_table.c.id)
             )
             track_data = session.execute(query).fetchall()
-            print(f"Number of rows fetched from track.projects: {len(track_data)}")
+            current_app.logger.info(f"Number of rows fetched from track.projects: {len(track_data)}")
 
-            debug_logs_enabled = current_app.config.get("ENABLE_DETAILED_LOGS", False)
-            if debug_logs_enabled:
-                for row in track_data:
-                    print(f"Fetched row: {dict(row._mapping)}")
+            for row in track_data:
+                current_app.logger.debug(f"Fetched row: {dict(row._mapping)}")
 
         return track_data
 
@@ -73,7 +71,7 @@ class TrackService:
             "Content-Type": "application/json"
         }
 
-        print(f"Fetching projects from Track API: {track_projects_endpoint}")
+        current_app.logger.info(f"Fetching projects from Track API: {track_projects_endpoint}")
         try:
             # Make the GET request to the Track API with Authorization
             response = requests.get(track_projects_endpoint, headers=headers, timeout=30)
@@ -81,7 +79,7 @@ class TrackService:
 
             # Parse the JSON response
             projects = response.json()
-            print(f"Track API returned {len(projects)} projects.")
+            current_app.logger.info(f"Track API returned {len(projects)} projects.")
 
             # Map the required fields
             mapped_projects = []
@@ -96,11 +94,11 @@ class TrackService:
                 }
                 mapped_projects.append(mapped_project)
 
-            print(f"Mapped {len(mapped_projects)} projects with required fields.")
+            current_app.logger.info(f"Mapped {len(mapped_projects)} projects with required fields.")
             return mapped_projects
 
         except requests.RequestException as e:
-            print(f"Error while calling Track API: {e}")
+            current_app.logger.error(f"Error while calling Track API: {e}")
             raise
 
     @staticmethod
@@ -129,7 +127,7 @@ class TrackService:
         data = f"client_id={admin_client_id}&grant_type=client_credentials&client_secret={admin_secret}"
 
         try:
-            print(f"Fetching Keycloak token from: {token_url}")
+            current_app.logger.info(f"Fetching Keycloak token from: {token_url}")
             response = requests.post(token_url, data=data, headers=headers, timeout=timeout)
             response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
 
@@ -140,5 +138,5 @@ class TrackService:
             return access_token
 
         except requests.RequestException as e:
-            print(f"Error while fetching Keycloak token: {e}")
+            current_app.logger.error(f"Error while fetching Keycloak token: {e}")
             raise

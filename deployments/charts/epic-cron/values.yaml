@@ -17,11 +17,19 @@ imageTag: dev
 cronTab: |
   0 1 * * * default cd /epic-cron && ./run_project_cron_submit.sh
   0 3 * * * default cd /epic-cron && ./run_project_cron_compliance.sh
+  */5 * * * * default cd /epic-cron && ./run_emailer.sh
+  */5 * * * * default cd /epic-cron && ./run_centre_emailer.sh
+  0 17 * * 1-5 default cd /epic-cron && ./run_approved_condition.sh
 
 SUBMIT:
   database:
     host: submit-patroni
     port: "5432"
+  web:
+    url: "https://dev.submit.eao.gov.bc.ca"
+  sender:
+    email: "EAO.ManagementPlanSupport@gov.bc.ca"
+  staffSupportMailId: ""
 
 COMPLIANCE:
   database:
@@ -30,11 +38,28 @@ COMPLIANCE:
 
 TRACK:
   database:
-    host:
+    host: epictrack-patroni
     port: "5432"
 
+CENTRE:
+  database:
+    host: submit-patroni
+    port: "5432"
+
+CHES:
+  tokenEndpoint: "https://dev.loginproxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token"
+  apiEndpoint: "https://ches-dev.api.gov.bc.ca"
+  clientId: ""
+  clientSecret: ""
 
 secrets:
-  trackDbUsername: ""
-  trackDbPassword: ""
-  trackDbName: ""
+  submitDbUsername: ""
+  submitDbPassword: ""
+  submitDbName: ""
+  centreDbUsername: ""
+  centreDbPassword: ""
+  centreDbName: ""
+  keycloakServiceAccountId: ""
+  keycloakServiceAccountSecret: ""
+  chesClientId: ""
+  chesClientSecret: ""

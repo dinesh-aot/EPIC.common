@@ -1,4 +1,4 @@
-# Copyright © 2021 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,7 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""This module contains constants used in the application."""
 
-"""This exports all of the models and schemas used by the application."""
+SUBMISSION_PACKAGE_TYPE_EMAIL_SENDER_MAP = {
+    'Management Plan': 'EAO.ManagementPlanSupport@gov.bc.ca',
+    'IEM': 'EAO.ManagementPlanSupport@gov.bc.ca'
+}
 
-from .db import db, ma
+SUBMISSION_PACKAGE_TYPE_SENDER_MAP = {
+    'Management Plan': 'The Management Plan Team at the Environmental Assessment Office',
+    'IEM': 'EAO.ManagementPlanSupport@gov.bc.ca'
+}
+
+PACKAGE_ENTITY_TYPE = 'PACKAGE'
+INVITATION_ENTITY_TYPE = 'INVITATION'
