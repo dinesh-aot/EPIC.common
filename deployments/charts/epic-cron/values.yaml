@@ -1,9 +1,7 @@
 name: epic-cron
 imageNamespace: c8b80a-tools
 env: dev
-database:
-  host: submit-patroni
-  port: "5432"
+environment: Development
 resources:
   requests:
     cpu: 100m
@@ -30,6 +28,7 @@ SUBMIT:
   sender:
     email: "EAO.ManagementPlanSupport@gov.bc.ca"
   staffSupportMailId: ""
+  signupUrlPath: "/proponent/registration"
 
 COMPLIANCE:
   database:
@@ -40,11 +39,21 @@ TRACK:
   database:
     host: epictrack-patroni
     port: "5432"
+  api:
+    url: "https://epictrack-api-c72cba-dev.apps.gold.devops.gov.bc.ca"
 
 CENTRE:
   database:
-    host: submit-patroni
+    host: centre-patroni
     port: "5432"
+
+CONDITION:
+  api:
+    url: "https://condition-api-c8b80a-dev.apps.gold.devops.gov.bc.ca"
+
+KEYCLOAK:
+  baseUrl: "https://dev.loginproxy.gov.bc.ca/auth"
+  realmName: "eao-epic"
 
 CHES:
   tokenEndpoint: "https://dev.loginproxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token"
@@ -52,14 +61,19 @@ CHES:
   clientId: ""
   clientSecret: ""
 
+CLAMAV:
+  host: "142.34.194.68"
+  port: "16504"
+
 secrets:
-  submitDbUsername: ""
+  trackDbUsername: "app"
+  trackDbPassword: ""
+  trackDbName: "app"
+  submitDbUsername: "app"
   submitDbPassword: ""
-  submitDbName: ""
-  centreDbUsername: ""
+  submitDbName: "app"
+  centreDbUsername: "app"
   centreDbPassword: ""
-  centreDbName: ""
-  keycloakServiceAccountId: ""
-  keycloakServiceAccountSecret: ""
-  chesClientId: ""
-  chesClientSecret: ""
+  centreDbName: "app"
+  serviceAccountId: ""
+  serviceAccountSecret: ""
