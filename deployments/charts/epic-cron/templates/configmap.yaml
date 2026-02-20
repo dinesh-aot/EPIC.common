@@ -8,3 +8,32 @@ metadata:
 data:
   crontab: |-
 {{ .Values.cronTab | indent 4 }}
+  # Database hosts and ports
+  TRACK_DATABASE_HOST: "{{ .Values.TRACK.database.host }}"
+  TRACK_DATABASE_PORT: "{{ .Values.TRACK.database.port }}"
+  SUBMIT_DATABASE_HOST: "{{ .Values.SUBMIT.database.host }}"
+  SUBMIT_DATABASE_PORT: "{{ .Values.SUBMIT.database.port }}"
+  COMPLIANCE_DATABASE_HOST: "{{ .Values.COMPLIANCE.database.host }}"
+  COMPLIANCE_DATABASE_PORT: "{{ .Values.COMPLIANCE.database.port }}"
+  CENTRE_DATABASE_HOST: "{{ .Values.CENTRE.database.host }}"
+  CENTRE_DATABASE_PORT: "{{ .Values.CENTRE.database.port }}"
+  # CHES configuration
+  CHES_TOKEN_ENDPOINT: "{{ .Values.CHES.tokenEndpoint }}"
+  CHES_BASE_URL: "{{ .Values.CHES.apiEndpoint }}"
+  # SUBMIT configuration
+  WEB_URL: "{{ .Values.SUBMIT.web.url }}"
+  SENDER_EMAIL: "{{ .Values.SUBMIT.sender.email }}"
+  STAFF_SUPPORT_MAIL_ID: "{{ .Values.SUBMIT.staffSupportMailId }}"
+  SIGNUP_URL_PATH: "{{ .Values.SUBMIT.signupUrlPath }}"
+  # Keycloak configuration
+  KEYCLOAK_BASE_URL: "{{ .Values.KEYCLOAK.baseUrl }}"
+  KEYCLOAK_REALM_NAME: "{{ .Values.KEYCLOAK.realmName }}"
+  # API URLs
+  TRACK_API_BASE_URL: "{{ .Values.TRACK.api.url }}"
+  CONDITION_API_BASE_URL: "{{ .Values.CONDITION.api.url }}"
+  # ClamAV configuration
+  CLAMAV_HOST: "{{ .Values.CLAMAV.host }}"
+  CLAMAV_PORT: "{{ .Values.CLAMAV.port }}"
+  # Other configuration
+  CONNECT_TIMEOUT: "60"
+  ENVIRONMENT: "{{ .Values.environment }}"

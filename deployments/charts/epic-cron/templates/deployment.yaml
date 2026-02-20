@@ -36,42 +36,54 @@ spec:
             - name: TRACK_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
-                  key: app-db-username
+                  name: {{ .Values.name }}
+                  key: TRACK_DATABASE_USERNAME
             - name: TRACK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
-                  key: app-db-password
+                  name: {{ .Values.name }}
+                  key: TRACK_DATABASE_PASSWORD
             - name: TRACK_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: track-patroni
-                  key: app-db-username
+                  name: {{ .Values.name }}
+                  key: TRACK_DATABASE_NAME
             - name: TRACK_DATABASE_HOST
-              value: "{{ .Values.TRACK.database.host }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: TRACK_DATABASE_HOST
             - name: TRACK_DATABASE_PORT
-              value: "{{ .Values.TRACK.database.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: TRACK_DATABASE_PORT
 
             - name: SUBMIT_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-name
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_USERNAME
             - name: SUBMIT_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-password
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_PASSWORD
             - name: SUBMIT_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: submit-patroni
-                  key: app-db-name
+                  name: {{ .Values.name }}
+                  key: SUBMIT_DATABASE_NAME
             - name: SUBMIT_DATABASE_HOST
-              value: "{{ .Values.SUBMIT.database.host }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: SUBMIT_DATABASE_HOST
             - name: SUBMIT_DATABASE_PORT
-              value: "{{ .Values.SUBMIT.database.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: SUBMIT_DATABASE_PORT
 
             - name: COMPLIANCE_DATABASE_USERNAME
               valueFrom:
@@ -89,9 +101,137 @@ spec:
                   name: compliance-patroni
                   key: app-db-name
             - name: COMPLIANCE_DATABASE_HOST
-              value: "{{ .Values.COMPLIANCE.database.host }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: COMPLIANCE_DATABASE_HOST
             - name: COMPLIANCE_DATABASE_PORT
-              value: "{{ .Values.COMPLIANCE.database.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: COMPLIANCE_DATABASE_PORT
+
+            - name: CENTRE_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_USERNAME
+            - name: CENTRE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_PASSWORD
+            - name: CENTRE_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CENTRE_DATABASE_NAME
+            - name: CENTRE_DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CENTRE_DATABASE_HOST
+            - name: CENTRE_DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CENTRE_DATABASE_PORT
+
+            - name: CHES_TOKEN_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CHES_TOKEN_ENDPOINT
+            - name: CHES_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CHES_BASE_URL
+            - name: CHES_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CHES_CLIENT_ID
+            - name: CHES_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CHES_CLIENT_SECRET
+
+            - name: WEB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: WEB_URL
+            - name: SENDER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: SENDER_EMAIL
+            - name: STAFF_SUPPORT_MAIL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: STAFF_SUPPORT_MAIL_ID
+            - name: SIGNUP_URL_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: SIGNUP_URL_PATH
+
+            - name: KEYCLOAK_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: KEYCLOAK_BASE_URL
+            - name: KEYCLOAK_REALM_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: KEYCLOAK_REALM_NAME
+            - name: SERVICE_ACCOUNT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: SERVICE_ACCOUNT_ID
+            - name: SERVICE_ACCOUNT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: SERVICE_ACCOUNT_SECRET
+            - name: CONNECT_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CONNECT_TIMEOUT
+
+            - name: TRACK_API_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: TRACK_API_BASE_URL
+            - name: CONDITION_API_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CONDITION_API_BASE_URL
+
+            - name: CLAMAV_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CLAMAV_HOST
+            - name: CLAMAV_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CLAMAV_PORT
+
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: ENVIRONMENT
 
           resources:
             requests:
