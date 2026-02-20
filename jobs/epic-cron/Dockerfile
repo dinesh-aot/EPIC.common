@@ -39,16 +39,17 @@ WORKDIR $HOME
 # Install the requirements
 COPY ./requirements.txt .
 COPY ./requirements/ ./requirements/
-COPY . .
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application after pip install to avoid conflicts with git dependencies
+COPY . .
 
 RUN pip install .
 
 # Set Python path
 ENV PYTHONPATH=/epic-cron/src
-
 
 # Set ownership and permissions
 # Set scripts as executable (make files and python files do not have to be marked)
