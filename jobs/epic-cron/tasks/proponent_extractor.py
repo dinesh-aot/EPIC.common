@@ -15,10 +15,10 @@ class ProponentExtractor:
 
         # Initialize target database session
         print("Initializing database sessions...")
-        target_session = init_submit_db(current_app)
+        db = init_submit_db(current_app)
 
         proponents_data = TrackService.fetch_proponents()
-        cls._sync_proponents(proponents_data, target_session, SubmitProponentModel)
+        cls._sync_proponents(proponents_data, db.session, SubmitProponentModel)
 
         print(f"Proponent Extractor completed at {datetime.now()}")
 
