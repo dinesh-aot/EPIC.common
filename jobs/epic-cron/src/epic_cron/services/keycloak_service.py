@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Keycloak admin functions – same pattern as submit-api KeycloakService."""
+from typing import Optional
+from urllib.parse import quote
+
 import requests
 from flask import current_app
 
@@ -25,18 +28,18 @@ class KeycloakService:
 
     @staticmethod
     def _get_admin_token():
-        """Create an admin token (same as submit-api KeycloakService._get_admin_token)."""
+        """Create an admin token using service account credentials."""
         config = current_app.config
         base_url = config.get("KEYCLOAK_BASE_URL")
         realm = config.get("KEYCLOAK_REALM_NAME")
-        admin_client_id = config.get("KEYCLOAK_EMAILER_CLIENT")
-        admin_secret = config.get("KEYCLOAK_EMAILER_SECRET")
+        admin_client_id = config.get("SERVICE_ACCOUNT_ID")
+        admin_secret = config.get("SERVICE_ACCOUNT_SECRET")
         timeout = int(config.get("CONNECT_TIMEOUT", 60))
         token_url = f"{base_url}/auth/realms/{realm}/protocol/openid-connect/token"
 
         if not admin_client_id or not admin_secret:
             raise ValueError(
-                "KEYCLOAK_EMAILER_CLIENT and KEYCLOAK_EMAILER_SECRET must be set in .env"
+                "SERVICE_ACCOUNT_ID and SERVICE_ACCOUNT_SECRET must be set in .env"
             )
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
@@ -70,6 +73,81 @@ class KeycloakService:
         response = requests.get(url, headers=headers, timeout=timeout)
         response.raise_for_status()
         return response
+
+    @staticmethod
+    def _request_keycloak_optional(relative_url: str) -> Optional[requests.Response]:
+        """GET request to Keycloak admin API; returns None on 404."""
+        base_url = current_app.config.get("KEYCLOAK_BASE_URL")
+        realm = current_app.config.get("KEYCLOAK_REALM_NAME")
+        timeout = int(current_app.config.get("CONNECT_TIMEOUT", 60))
+        try:
+            admin_token = KeycloakService._get_admin_token()
+        except (ValueError, requests.RequestException):
+            return None
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {admin_token}",
+        }
+        url = f"{base_url}/auth/admin/realms/{realm}/{relative_url}"
+        try:
+            response = requests.get(url, headers=headers, timeout=timeout)
+            if response.status_code == 404:
+                return None
+            response.raise_for_status()
+            return response
+        except requests.RequestException:
+            return None
+
+    @staticmethod
+    def _normalize_user(keycloak_user: dict) -> dict:
+        """Map Keycloak user (firstName, lastName, username) to common shape."""
+        return {
+            "first_name": (keycloak_user.get("firstName") or "").strip(),
+            "last_name": (keycloak_user.get("lastName") or "").strip(),
+            "username": (keycloak_user.get("username") or "").strip(),
+        }
+
+    @classmethod
+    def get_user_by_guid(cls, user_auth_guid: str) -> Optional[dict]:
+        """
+        Get user from Keycloak by guid.
+
+        In the DB, user_auth_guid is the Keycloak user id (UUID). Try GET users/{id} first;
+        if 404, try username search (e.g. xxxxx@idir). Returns dict with first_name, last_name, username; or None.
+        """
+        if not (user_auth_guid or user_auth_guid.strip()):
+            return None
+        guid = user_auth_guid.strip()
+        response = cls._request_keycloak_optional(f"users/{guid}")
+        if response:
+            return cls._normalize_user(response.json())
+        quoted = quote(guid, safe="")
+        response = cls._request_keycloak_optional(
+            f"users?exact=true&username={quoted}"
+        )
+        if response:
+            users = response.json()
+            if users and len(users) > 0:
+                return cls._normalize_user(users[0])
+        return None
+
+    @staticmethod
+    def format_user_display_name(user: dict, fallback_id: str, include_username: bool = False) -> str:
+        """
+        Build display name from user dict.
+        If include_username is True: "First Last (username@idir)". Otherwise: "First Last" only.
+        """
+        first = (user.get("first_name") or "").strip()
+        last = (user.get("last_name") or "").strip()
+        username = (user.get("username") or "").strip()
+        name_part = f"{first} {last}".strip()
+        if name_part and username and include_username:
+            return f"{name_part} ({username})"
+        if name_part:
+            return name_part
+        if username:
+            return username
+        return fallback_id
 
     @staticmethod
     def get_groups(brief_representation: bool = False):

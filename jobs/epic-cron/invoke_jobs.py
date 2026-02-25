@@ -88,6 +88,10 @@ def run(job_name, target_system=None, file_path=None):
             application.logger.info(f'Starting Approved Condition Sync At {datetime.now()}')
             SyncApprovedCondition.sync_approved_condition()
             application.logger.info(f'Completed Sync Approved Condition')
+        elif job_name == 'PENDING_ACCESS_REMINDER':
+            from tasks.pending_access_reminder import PendingAccessReminder
+            PendingAccessReminder.run()
+            application.logger.info(f'<<<< Completed Pending Access Reminder >>>>')
 
         else:
             application.logger.warning('No valid job_name passed. Exiting without running any tasks.')

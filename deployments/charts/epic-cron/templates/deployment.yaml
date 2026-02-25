@@ -88,18 +88,18 @@ spec:
             - name: COMPLIANCE_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: compliance-patroni
-                  key: app-db-username
+                  name: {{ .Values.name }}
+                  key: COMPLIANCE_DATABASE_USERNAME
             - name: COMPLIANCE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: compliance-patroni
-                  key: app-db-password
+                  name: {{ .Values.name }}
+                  key: COMPLIANCE_DATABASE_PASSWORD
             - name: COMPLIANCE_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: compliance-patroni
-                  key: app-db-name
+                  name: {{ .Values.name }}
+                  key: COMPLIANCE_DATABASE_NAME
             - name: COMPLIANCE_DATABASE_HOST
               valueFrom:
                 configMapKeyRef:
@@ -232,6 +232,22 @@ spec:
                 configMapKeyRef:
                   name: {{ .Values.name }}-config
                   key: ENVIRONMENT
+
+            - name: PENDING_ACCESS_REMINDER_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: PENDING_ACCESS_REMINDER_HOURS
+            - name: PENDING_ACCESS_REMINDER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: PENDING_ACCESS_REMINDER_EMAIL
+            - name: REQUEST_ACCESS_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: REQUEST_ACCESS_BASE_URL
 
           resources:
             requests:

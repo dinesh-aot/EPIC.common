@@ -167,3 +167,4 @@ cython_debug/
 
 /deployments/charts/epic-cron/values.prod.yaml
 /deployments/charts/epic-cron/values.test.yaml
+/deployments/charts/epic-cron/values.dev.yaml

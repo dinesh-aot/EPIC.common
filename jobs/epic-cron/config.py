@@ -105,9 +105,6 @@ class _Config():  # pylint: disable=too-few-public-methods
         f"postgresql://{CONDITION_DB_USER}:{CONDITION_DB_PASSWORD}@{CONDITION_DB_HOST}:{int(CONDITION_DB_PORT)}/{CONDITION_DB_NAME}"
     )
 
-    # Debug logging for detailed logs in Project Extractor
-    ENABLE_DETAILED_LOGS = os.getenv("ENABLE_DETAILED_LOGS", "false").lower() == "true"
-
     TRACK_API_BASE_URL=os.getenv('TRACK_API_BASE_URL')
     CONDITION_API_BASE_URL = os.getenv("CONDITION_API_BASE_URL")
     KEYCLOAK_BASE_URL = os.getenv('KEYCLOAK_BASE_URL')
@@ -157,6 +154,11 @@ class _Config():  # pylint: disable=too-few-public-methods
     
     # For backward compatibility with submit_cron code
     SQLALCHEMY_DATABASE_URI = SUBMIT_DATABASE_URI
+    
+    # Pending access request reminder (Centre)
+    PENDING_ACCESS_REMINDER_HOURS = int(os.getenv('PENDING_ACCESS_REMINDER_HOURS', '48'))
+    PENDING_ACCESS_REMINDER_EMAIL = os.getenv('PENDING_ACCESS_REMINDER_EMAIL', '')
+    REQUEST_ACCESS_BASE_URL = os.getenv('REQUEST_ACCESS_BASE_URL', 'http://localhost:5173')
     
     ENVIRONMENT = os.getenv('ENVIRONMENT', os.getenv('ENV_NAME', ''))
 

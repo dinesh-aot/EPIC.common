@@ -11,22 +11,20 @@ class TrackService:
     @staticmethod
     def fetch_proponents():
         """Fetch and log unique proponents from the track.proponents table."""
-        print("Fetching proponents from track database...")
+        current_app.logger.info("Fetching proponents from track database...")
 
         track_session = init_db(current_app)
         with track_session() as session:
             track_metadata = MetaData()
             track_proponents_table = Table('proponents', track_metadata, autoload_with=session.bind)
 
-            print("Selecting all proponents...")
+            current_app.logger.info("Selecting all proponents...")
             query = select(track_proponents_table.c.id, track_proponents_table.c.name)
             proponents_data = session.execute(query).fetchall()
-            print(f"Number of rows fetched from track.proponents: {len(proponents_data)}")
+            current_app.logger.info(f"Number of rows fetched from track.proponents: {len(proponents_data)}")
             
-            debug_logs_enabled = current_app.config.get("ENABLE_DETAILED_LOGS", False)
-            if debug_logs_enabled:
-                 for row in proponents_data:
-                    print(f"Fetched proponent: {dict(row._mapping)}")
+            for row in proponents_data:
+                current_app.logger.debug(f"Fetched proponent: {dict(row._mapping)}")
 
         return proponents_data
 

@@ -37,3 +37,7 @@ data:
   # Other configuration
   CONNECT_TIMEOUT: "60"
   ENVIRONMENT: "{{ .Values.environment }}"
+  # Pending Access Reminder configuration
+  PENDING_ACCESS_REMINDER_HOURS: "{{ .Values.CENTRE.pendingAccessReminder.hours }}"
+  PENDING_ACCESS_REMINDER_EMAIL: "{{ .Values.CENTRE.pendingAccessReminder.email }}"
+  REQUEST_ACCESS_BASE_URL: "{{ .Values.CENTRE.pendingAccessReminder.baseUrl }}"
