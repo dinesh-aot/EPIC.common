@@ -1,0 +1,78 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "EPIC CRON - Extract Project (SUBMIT)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["SUBMIT"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Extract Project (COMPLIANCE)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["COMPLIANCE"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Extract Project (CONDITIONS)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["CONDITIONS"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Email (SUBMIT)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["EMAIL", "SUBMIT"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Email (CENTRE)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["EMAIL", "CENTRE"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Sync Approved Condition",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["SYNC_CONDITION"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Scan Virus (Specify File Path)",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["SCAN_VIRUS", "/path/to/file"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

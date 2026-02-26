@@ -1,9 +1,7 @@
 name: epic-cron
 imageNamespace: c8b80a-tools
 env: dev
-database:
-  host: submit-patroni
-  port: "5432"
+environment: Development
 resources:
   requests:
     cpu: 100m
@@ -17,11 +15,20 @@ imageTag: dev
 cronTab: |
   0 1 * * * default cd /epic-cron && ./run_project_cron_submit.sh
   0 3 * * * default cd /epic-cron && ./run_project_cron_compliance.sh
+  */5 * * * * default cd /epic-cron && ./run_emailer.sh
+  */5 * * * * default cd /epic-cron && ./run_centre_emailer.sh
+  0 17 * * 1-5 default cd /epic-cron && ./run_approved_condition.sh
 
 SUBMIT:
   database:
     host: submit-patroni
     port: "5432"
+  web:
+    url: "https://dev.submit.eao.gov.bc.ca"
+  sender:
+    email: "EAO.ManagementPlanSupport@gov.bc.ca"
+  staffSupportMailId: ""
+  signupUrlPath: "/proponent/registration"
 
 COMPLIANCE:
   database:
@@ -30,11 +37,43 @@ COMPLIANCE:
 
 TRACK:
   database:
-    host:
+    host: epictrack-patroni
+    port: "5432"
+  api:
+    url: "https://epictrack-api-c72cba-dev.apps.gold.devops.gov.bc.ca"
+
+CENTRE:
+  database:
+    host: centre-patroni
     port: "5432"
 
+CONDITION:
+  api:
+    url: "https://condition-api-c8b80a-dev.apps.gold.devops.gov.bc.ca"
+
+KEYCLOAK:
+  baseUrl: "https://dev.loginproxy.gov.bc.ca/auth"
+  realmName: "eao-epic"
+
+CHES:
+  tokenEndpoint: "https://dev.loginproxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token"
+  apiEndpoint: "https://ches-dev.api.gov.bc.ca"
+  clientId: ""
+  clientSecret: ""
+
+CLAMAV:
+  host: "142.34.194.68"
+  port: "16504"
 
 secrets:
-  trackDbUsername: ""
+  trackDbUsername: "app"
   trackDbPassword: ""
-  trackDbName: ""
+  trackDbName: "app"
+  submitDbUsername: "app"
+  submitDbPassword: ""
+  submitDbName: "app"
+  centreDbUsername: "app"
+  centreDbPassword: ""
+  centreDbName: "app"
+  serviceAccountId: ""
+  serviceAccountSecret: ""

@@ -15,10 +15,10 @@ class VirusScanner:
             infected, info = clam.scan_bytes(data)
 
             if infected is True:
-                print(f"Virus detected: {info}")
+                current_app.logger.warning(f"Virus detected: {info}")
             elif infected is False:
-                print("File is clean.")
+                current_app.logger.info("File is clean.")
             else:
-                print(f"Scan failed or unknown result: {info}")
+                current_app.logger.warning(f"Scan failed or unknown result: {info}")
         except Exception as e:
-            print(f"Error scanning file: {e}")
+            current_app.logger.error(f"Error scanning file: {e}")
