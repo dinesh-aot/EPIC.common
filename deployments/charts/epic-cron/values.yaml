@@ -39,8 +39,6 @@ TRACK:
   database:
     host: epictrack-patroni
     port: "5432"
-  api:
-    url: "https://epictrack-api-c72cba-dev.apps.gold.devops.gov.bc.ca"
 
 CENTRE:
   database:

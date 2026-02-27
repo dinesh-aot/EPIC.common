@@ -29,7 +29,6 @@ data:
   KEYCLOAK_BASE_URL: "{{ .Values.KEYCLOAK.baseUrl }}"
   KEYCLOAK_REALM_NAME: "{{ .Values.KEYCLOAK.realmName }}"
   # API URLs
-  TRACK_API_BASE_URL: "{{ .Values.TRACK.api.url }}"
   CONDITION_API_BASE_URL: "{{ .Values.CONDITION.api.url }}"
   # ClamAV configuration
   CLAMAV_HOST: "{{ .Values.CLAMAV.host }}"

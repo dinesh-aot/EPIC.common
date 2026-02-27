@@ -105,7 +105,6 @@ class _Config():  # pylint: disable=too-few-public-methods
         f"postgresql://{CONDITION_DB_USER}:{CONDITION_DB_PASSWORD}@{CONDITION_DB_HOST}:{int(CONDITION_DB_PORT)}/{CONDITION_DB_NAME}"
     )
 
-    TRACK_API_BASE_URL=os.getenv('TRACK_API_BASE_URL')
     CONDITION_API_BASE_URL = os.getenv("CONDITION_API_BASE_URL")
     KEYCLOAK_BASE_URL = os.getenv('KEYCLOAK_BASE_URL')
     KEYCLOAK_REALM_NAME = os.getenv('KEYCLOAK_REALM_NAME', 'eao-epic')
