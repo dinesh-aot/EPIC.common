@@ -205,11 +205,6 @@ spec:
                   name: {{ .Values.name }}-config
                   key: CONNECT_TIMEOUT
 
-            - name: TRACK_API_BASE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Values.name }}-config
-                  key: TRACK_API_BASE_URL
             - name: CONDITION_API_BASE_URL
               valueFrom:
                 configMapKeyRef:

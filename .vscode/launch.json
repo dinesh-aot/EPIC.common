@@ -73,6 +73,26 @@
             "args": ["SCAN_VIRUS", "/path/to/file"],
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Extract Work",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["EXTRACT_WORK"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "EPIC CRON - Extract Phase",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["EXTRACT_PHASE"],
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }

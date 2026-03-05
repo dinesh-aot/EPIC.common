@@ -8,10 +8,13 @@ from utils.logger import setup_logging
 import config
 from tasks.project_extractor import ProjectExtractor, TargetSystem  # Import the enum
 from tasks.proponent_extractor import ProponentExtractor
+from tasks.proponent_status_updater import ProponentStatusUpdater
 from tasks.virus_scanner import VirusScanner
 from tasks.submit_mail import SubmitMailer
 from tasks.centre_mail import CentreMailer
 from tasks.sync_approved_condition import SyncApprovedCondition
+from tasks.work_extractor import WorkExtractor
+from tasks.phase_extractor import PhaseExtractor
 
 setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
 
@@ -74,6 +77,13 @@ def run(job_name, target_system=None, file_path=None):
             ProjectExtractor.do_sync(target_system=target_system)
             application.logger.info(f'Completed Project Sync for {target_system.value}')
 
+            # Update proponent eligibility status after project sync (SUBMIT only)
+            if target_system == TargetSystem.SUBMIT:
+                from epic_cron.models.db import init_submit_db
+                application.logger.info('Running Proponent Status Updater...')
+                ProponentStatusUpdater.update(init_submit_db(application))
+                application.logger.info(f'<<<< Completed Proponent Status Update >>>>')
+
         elif job_name == 'SCAN_VIRUS':
             application.logger.info(f'Running Virus Scanner on: {file_path}')
             VirusScanner.scan_file_from_path(file_path)
@@ -92,6 +102,19 @@ def run(job_name, target_system=None, file_path=None):
             from tasks.pending_access_reminder import PendingAccessReminder
             PendingAccessReminder.run()
             application.logger.info(f'<<<< Completed Pending Access Reminder >>>>')
+        elif job_name == 'EXTRACT_WORK':
+            application.logger.info(f'Running Project Extractor for SUBMIT before Work Extraction...')
+            ProponentExtractor.do_sync()
+            application.logger.info(f'<<<< Completed Proponent Sync for SUBMIT >>>>')
+            ProjectExtractor.do_sync(target_system=TargetSystem.SUBMIT)
+            application.logger.info(f'<<<< Completed Project Sync for SUBMIT >>>>')
+            application.logger.info(f'Running Work Extractor at {datetime.now()}')
+            WorkExtractor.do_sync()
+            application.logger.info(f'<<<< Completed Work Extraction >>>>')
+        elif job_name == 'EXTRACT_PHASE':
+            application.logger.info(f'Running Phase Extractor at {datetime.now()}')
+            PhaseExtractor.do_sync()
+            application.logger.info(f'<<<< Completed Phase Extraction >>>>')
 
         else:
             application.logger.warning('No valid job_name passed. Exiting without running any tasks.')
@@ -103,7 +126,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if not args:
-        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/SCAN_VIRUS")
+        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/SCAN_VIRUS/EXTRACT_WORK/EXTRACT_PHASE")
         sys.exit(1)
 
     job_type = args[0]
@@ -115,6 +138,12 @@ if __name__ == "__main__":
 
     elif job_type == "SYNC_CONDITION":
         run("SYNC_CONDITION")
+
+    elif job_type == "EXTRACT_WORK":
+        run("EXTRACT_WORK")
+
+    elif job_type == "EXTRACT_PHASE":
+        run("EXTRACT_PHASE")
 
     elif job_type == "SCAN_VIRUS":
         if len(args) < 2:
@@ -129,6 +158,6 @@ if __name__ == "__main__":
             target_system = TargetSystem(job_type)
             run("EXTRACT_PROJECT", target_system)
         except ValueError:
-            logger.error(f"Invalid job type '{job_type}'. Must be one of: SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SCAN_VIRUS")
+            logger.error(f"Invalid job type '{job_type}'. Must be one of: SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SCAN_VIRUS, EXTRACT_WORK, EXTRACT_PHASE")
             sys.exit(1)
 

@@ -9,7 +9,6 @@ from submit_api.models.project import Project as SubmitProjectModel
 from epic_cron.models.db import init_db, init_submit_db, init_compliance_db, \
     init_conditions_db  # Function that initializes DB engines
 from epic_cron.services.track_service import TrackService
-from tasks.proponent_status_updater import ProponentStatusUpdater
 
 
 class TargetSystem(Enum):
@@ -33,13 +32,10 @@ class ProjectExtractor:
         
         try:
             # Step 1: Fetch data from track.projects
-            track_data = TrackService.fetch_track_data()
+            track_data = TrackService.fetch_track_projects()
 
             # Step 2: Upsert records into the target database (update existing or insert new)
             cls._upsert_into_target_db(track_data, target_session, target_model, target_system)
-            # Step 3: Proponent Status Update (Only for SUBMIT)
-            if target_system == TargetSystem.SUBMIT:
-                ProponentStatusUpdater.update(target_session, target_model)
 
             current_app.logger.info(f"Project Extractor for {target_system.value} completed at {datetime.now()}")
         finally:
@@ -58,95 +54,6 @@ class ProjectExtractor:
         if target_system == TargetSystem.CONDITIONS:
             return init_conditions_db(current_app), ConditionProjectModel
         return init_compliance_db(current_app), ComplianceProjectModel
-
-    @staticmethod
-    def _clear_target_db(target_session, target_model, target_system):
-
-        """
-           Clear existing records in the target database for projects table.
-
-           This method uses record-by-record deletion to handle dependency issues caused by foreign key constraints.
-           Instead of bulk deletion, which might fail entirely, this approach ensures each record is processed
-           individually. Records that cannot be deleted due to dependencies are logged for further analysis.
-           """
-
-        current_app.logger.info(f"Preparing to clear existing records in the {target_system.value} database...")
-
-        # Initialize counters for summary
-        total_records = 0
-        failed_deletes = 0
-        successful_deletes = 0
-        failed_records = []
-
-        # Handle Flask-SQLAlchemy vs raw SQLAlchemy differently
-        if target_system == TargetSystem.SUBMIT:
-            # Flask-SQLAlchemy - use db.session directly
-            from epic_cron.models import db
-            session = db.session
-            try:
-                current_app.logger.info(f"Fetching all records from the {target_system.value} database for deletion...")
-                records = session.query(target_model).all()
-                total_records = len(records)
-
-                for record in records:
-                    record_data = {col.name: getattr(record, col.name, None) for col in record.__table__.columns}
-
-                    current_app.logger.debug(f"trying to  delete record: {record_data}")
-                    try:
-                        session.delete(record)
-                        session.commit()  # Commit after each successful delete
-                        successful_deletes += 1
-                        current_app.logger.debug(f"successfully deleted record: {record_data}")
-                    except Exception as delete_error:
-                        failed_deletes += 1
-                        failed_records.append({"record": record_data, "error": str(delete_error)})
-                        current_app.logger.warning(f"Could not delete record: {record_data}. Error: {delete_error}")
-                        session.rollback()  # Rollback only this transaction
-
-                current_app.logger.info(f"Finished processing deletions in the {target_system.value} database.")
-            except Exception as fetch_error:
-                current_app.logger.error(f"Failed to fetch records from the {target_system.value} database. Error: {fetch_error}")
-                session.rollback()
-        else:
-            # Raw SQLAlchemy - use context manager
-            with target_session() as session:
-                try:
-                    current_app.logger.info(f"Fetching all records from the {target_system.value} database for deletion...")
-                    records = session.query(target_model).all()
-                    total_records = len(records)
-
-                    for record in records:
-                        record_data = {col.name: getattr(record, col.name, None) for col in record.__table__.columns}
-
-                        current_app.logger.debug(f"trying to  delete record: {record_data}")
-                        try:
-                            session.delete(record)
-                            session.commit()  # Commit after each successful delete
-                            successful_deletes += 1
-                            current_app.logger.debug(f"successfully deleted record: {record_data}")
-                        except Exception as delete_error:
-                            failed_deletes += 1
-                            failed_records.append({"record": record_data, "error": str(delete_error)})
-                            current_app.logger.warning(f"Could not delete record: {record_data}. Error: {delete_error}")
-                            session.rollback()  # Rollback only this transaction
-
-                    current_app.logger.info(f"Finished processing deletions in the {target_system.value} database.")
-                except Exception as fetch_error:
-                    current_app.logger.error(f"Failed to fetch records from the {target_system.value} database. Error: {fetch_error}")
-                    session.rollback()
-
-        # Print summary of the operation
-        current_app.logger.info(f"Summary of target database clearing for {target_system.value}:")
-        current_app.logger.info(f"- Total records found: {total_records}")
-        current_app.logger.info(f"- Records successfully deleted: {successful_deletes}")
-        current_app.logger.info(f"- Records failed to delete: {failed_deletes}")
-
-        if failed_records:
-            current_app.logger.warning("Details of records that failed to delete:")
-            for failed in failed_records:
-                current_app.logger.warning(f"Record: {failed['record']}, Error: {failed['error']}")
-
-        current_app.logger.info("Summary: Clearing operation completed.")
 
     @staticmethod
     def _upsert_into_target_db(track_data, target_session, target_model, target_system):
