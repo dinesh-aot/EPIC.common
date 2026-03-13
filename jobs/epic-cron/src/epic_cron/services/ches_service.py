@@ -5,9 +5,7 @@ from datetime import datetime, timedelta
 
 import requests
 from flask import current_app
-from submit_api.data_classes.email_details import EmailDetails
-
-from submit_api.utils.template import Template
+from epic_cron.data_classes.email_details import EmailDetails
 
 class ChesApiService:
     """CHES api Service class."""
@@ -60,66 +58,21 @@ class ChesApiService:
         if datetime.now() >= self.token_expiry:
             self.access_token, self.token_expiry = self._get_access_token()
 
-    @staticmethod
-    def _get_email_body_from_template(template_name: str, body_args: dict, template_sub_directory: str = None):
-        """Get email body from a template with optional environment message for centre templates."""
-        if not template_name:
-            raise ValueError('Template name is required')
-
-        template = Template.get_template(template_name, template_sub_directory)
-        if not template:
-            raise ValueError('Template not found')
-        # logo is taken from submit UI / Web app..
-        # Went for this approach since making it base64 is hard to get it working in gmail..
-        # gmail strips the logo if base64 is used
-        # this is like submit web hosts the logo and the email uses it as a static server to get the logo image.
-        body_args['logo_url'] = f'{current_app.config.get("WEB_URL")}/assets/EAO_Logo-BZOR9oRj.png'
-        rendered_body = template.render(body_args)
-
-        # Add environment notification for centre templates in non-production
-        if template_sub_directory == 'centre':
-            env_name = current_app.config.get('ENVIRONMENT', '')
-            if env_name and env_name.lower() != 'production':
-                env_message = ChesApiService._create_environment_banner(env_name)
-                rendered_body = ChesApiService._inject_environment_banner(rendered_body, env_message)
-
-        return rendered_body
-
-    @staticmethod
-    def _create_environment_banner(env_name: str) -> str:
-        """Create HTML banner showing the current environment."""
-        return f'''
-            <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 10px; 
-                        margin: 20px 0; text-align: center; font-size: 14px; color: #856404;">
-                <strong>You are using {env_name} environment</strong>
-            </div>
-        '''
-
-    @staticmethod
-    def _inject_environment_banner(rendered_body: str, env_message: str) -> str:
-        """Inject environment banner into the email body."""
-        if '</body>' in rendered_body:
-            return rendered_body.replace('</body>', f'{env_message}</body>')
-        else:
-            return rendered_body + env_message
-
-    def _get_email_body(self, email_details: EmailDetails, template_sub_directory: str = None):
+    def _get_email_body(self, email_details: EmailDetails):
         """Get email body based on details or template."""
         if email_details.body:
             body = email_details.body
-            body_type = 'text'
+            body_type = email_details.body_type
         else:
-            body = self._get_email_body_from_template(email_details.template_name,
-                                                      email_details.body_args, template_sub_directory)
-            body_type = 'html'
+            raise ValueError('Email body must be pre-rendered before sending')
 
         return body, body_type
 
-    def send_email(self, email_details: EmailDetails, template_sub_directory: str = None):
+    def send_email(self, email_details: EmailDetails):
         """Generate document based on template and data."""
         self._ensure_valid_token()
 
-        body, body_type = self._get_email_body(email_details, template_sub_directory)
+        body, body_type = self._get_email_body(email_details)
 
         request_body = {
             'bodyType': body_type,
@@ -146,6 +99,13 @@ class ChesApiService:
             response.raise_for_status()
 
             response_json = response.json()
+            current_app.logger.info(
+                'Email sent via CHES | to=%s | subject=%s | from=%s | status=%s',
+                ', '.join(email_details.recipients),
+                email_details.subject,
+                email_details.sender,
+                response.status_code,
+            )
             return response_json, response.status_code
         except requests.exceptions.RequestException as e:
             current_app.logger.error(f'Error occurred while sending email: {str(e)}')
