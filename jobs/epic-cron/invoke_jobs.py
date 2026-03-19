@@ -21,6 +21,7 @@ from tasks.centre_mail import CentreMailer
 from tasks.sync_approved_condition import SyncApprovedCondition
 from tasks.work_extractor import WorkExtractor
 from tasks.phase_extractor import PhaseExtractor
+from tasks.epic_public_extractor import EpicPublicExtractor
 
 setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
 
@@ -122,6 +123,11 @@ def run(job_name, target_system=None, file_path=None):
             PhaseExtractor.do_sync()
             application.logger.info(f'<<<< Completed Phase Extraction >>>>')
 
+        elif job_name == 'EPIC_PUBLIC':
+            application.logger.info(f'Running EPIC Public Extractor at {datetime.now()}')
+            EpicPublicExtractor.do_sync()
+            application.logger.info(f'<<<< Completed EPIC Public Extraction >>>>')
+
         else:
             application.logger.warning('No valid job_name passed. Exiting without running any tasks.')
 
@@ -132,7 +138,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if not args:
-        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/SCAN_VIRUS/EXTRACT_WORK/EXTRACT_PHASE")
+        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/CONDITIONS/EMAIL/SYNC_CONDITION/SCAN_VIRUS/EXTRACT_WORK/EXTRACT_PHASE/EPIC_PUBLIC")
         sys.exit(1)
 
     job_type = args[0]
@@ -151,6 +157,9 @@ if __name__ == "__main__":
     elif job_type == "EXTRACT_PHASE":
         run("EXTRACT_PHASE")
 
+    elif job_type == "EPIC_PUBLIC":
+        run("EPIC_PUBLIC")
+
     elif job_type == "SCAN_VIRUS":
         if len(args) < 2:
             logger.error("You must provide a file path for SCAN_VIRUS.")
@@ -164,5 +173,5 @@ if __name__ == "__main__":
             target_system = TargetSystem(job_type)
             run("EXTRACT_PROJECT", target_system)
         except ValueError:
-            logger.error(f"Invalid job type '{job_type}'. Must be one of: SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SCAN_VIRUS, EXTRACT_WORK, EXTRACT_PHASE")
+            logger.error(f"Invalid job type '{job_type}'. Must be one of: SUBMIT, COMPLIANCE, CONDITIONS, EMAIL, SYNC_CONDITION, SCAN_VIRUS, EXTRACT_WORK, EXTRACT_PHASE, EPIC_PUBLIC")
             sys.exit(1)
