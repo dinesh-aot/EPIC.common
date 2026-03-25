@@ -122,7 +122,7 @@ class PackageSubmissionEmailService:  # pylint: disable=too-few-public-methods
             if user and getattr(user, 'staff_user', None) and user.staff_user:
                 return user.staff_user.full_name or entry.updated_by
             return entry.updated_by
-        return 'A team member'
+        return 'a team member'
 
     @staticmethod
     def get_email_sender_for_package_type(package_type: str) -> str:
