@@ -21,6 +21,7 @@ from tasks.centre_mail import CentreMailer
 from tasks.sync_approved_condition import SyncApprovedCondition
 from tasks.work_extractor import WorkExtractor
 from tasks.phase_extractor import PhaseExtractor
+from tasks.epic_public_extractor import EpicPublicExtractor
 
 setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
 
@@ -122,6 +123,10 @@ def run(job_name, target_system=None, file_path=None, ssl_email_option=None):
             PhaseExtractor.do_sync()
             application.logger.info(f'<<<< Completed Phase Extraction >>>>')
 
+        elif job_name == 'EPIC_PUBLIC':
+            application.logger.info(f'Running EPIC Public Extractor at {datetime.now()}')
+            EpicPublicExtractor.do_sync()
+            application.logger.info(f'<<<< Completed EPIC Public Extraction >>>>')
         elif job_name == 'CHECK_SSL':
             from tasks.ssl_checker import SSLChecker
             application.logger.info(f'Running SSL workflow at {datetime.now()}')
@@ -157,6 +162,8 @@ if __name__ == "__main__":
     elif job_type == "EXTRACT_PHASE":
         run("EXTRACT_PHASE")
 
+    elif job_type == "EPIC_PUBLIC":
+        run("EPIC_PUBLIC")
     elif job_type == "CHECK_SSL":
         ssl_email_option = args[1] if len(args) > 1 else None
         allowed_options = {"SEND_WEEKLY", "SEND_BIWEEKLY"}
