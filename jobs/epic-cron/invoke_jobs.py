@@ -68,7 +68,7 @@ def email_sender(target_system='SUBMIT'):
         raise ValueError(f'Invalid target_system: {target_system}')
 
 
-def run(job_name, target_system=None, file_path=None):
+def run(job_name, target_system=None, file_path=None, ssl_email_option=None):
     """Main function to run the job."""
     application = create_app()
 
@@ -127,6 +127,11 @@ def run(job_name, target_system=None, file_path=None):
             application.logger.info(f'Running EPIC Public Extractor at {datetime.now()}')
             EpicPublicExtractor.do_sync()
             application.logger.info(f'<<<< Completed EPIC Public Extraction >>>>')
+        elif job_name == 'CHECK_SSL':
+            from tasks.ssl_checker import SSLChecker
+            application.logger.info(f'Running SSL workflow at {datetime.now()}')
+            SSLChecker.run(force_email=ssl_email_option)
+            application.logger.info('<<<< Completed SSL Workflow >>>')
 
         else:
             application.logger.warning('No valid job_name passed. Exiting without running any tasks.')
@@ -138,7 +143,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if not args:
-        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/CONDITIONS/EMAIL/SYNC_CONDITION/SCAN_VIRUS/EXTRACT_WORK/EXTRACT_PHASE/EPIC_PUBLIC")
+        logger.error("You must provide a job type: SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/SCAN_VIRUS/EXTRACT_WORK/EXTRACT_PHASE/CHECK_SSL")
         sys.exit(1)
 
     job_type = args[0]
@@ -159,6 +164,13 @@ if __name__ == "__main__":
 
     elif job_type == "EPIC_PUBLIC":
         run("EPIC_PUBLIC")
+    elif job_type == "CHECK_SSL":
+        ssl_email_option = args[1] if len(args) > 1 else None
+        allowed_options = {"SEND_WEEKLY", "SEND_BIWEEKLY"}
+        if ssl_email_option and ssl_email_option not in allowed_options:
+            logger.error("CHECK_SSL optional flag must be SEND_WEEKLY or SEND_BIWEEKLY.")
+            sys.exit(1)
+        run("CHECK_SSL", ssl_email_option=ssl_email_option)
 
     elif job_type == "SCAN_VIRUS":
         if len(args) < 2:
@@ -173,5 +185,8 @@ if __name__ == "__main__":
             target_system = TargetSystem(job_type)
             run("EXTRACT_PROJECT", target_system)
         except ValueError:
-            logger.error(f"Invalid job type '{job_type}'. Must be one of: SUBMIT, COMPLIANCE, CONDITIONS, EMAIL, SYNC_CONDITION, SCAN_VIRUS, EXTRACT_WORK, EXTRACT_PHASE, EPIC_PUBLIC")
+            logger.error(
+                f"Invalid job type '{job_type}'. Must be one of: "
+                "SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SCAN_VIRUS, EXTRACT_WORK, EXTRACT_PHASE, CHECK_SSL"
+            )
             sys.exit(1)

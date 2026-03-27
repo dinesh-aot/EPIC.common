@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EPIC SSL update</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #1f2937; background-color: #ffffff; padding: 20px; }
+    .container { max-width: 760px; margin: auto; padding: 20px; }
+    .logo { text-align: left; margin-bottom: 20px; }
+    .logo img { max-width: 220px; height: auto; }
+    .content { font-size: 16px; line-height: 1.6; color: #374151; text-align: left; }
+    .grey-box { background-color: #f8fafc; padding: 16px; border-left: 4px solid #1a5a96; margin: 20px 0; }
+    .item-card { border: 1px solid #d9e2ec; background-color: #ffffff; padding: 16px; margin: 16px 0; }
+    .item-card h3 { margin: 0 0 8px; color: #0f172a; font-size: 18px; }
+    .route-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .route-table th, .route-table td { border: 1px solid #d9e2ec; padding: 10px 12px; text-align: left; vertical-align: top; }
+    .route-table th { background-color: #f8fafc; color: #0f172a; }
+    .cta-link { color: #1a5a96; font-weight: bold; text-decoration: none; }
+    .cta-link:hover { text-decoration: underline; }
+    .footer { font-size: 12px; color: #666; margin-top: 30px; text-align: left; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="{{ logo_url }}" alt="EPIC Logo"/>
+    </div>
+    <div class="content">
+      <p>Hello,</p>
+      {% if environment_label %}
+      <p><strong>Environment:</strong> {{ environment_label|upper }}</p>
+      {% endif %}
+
+      {% if all_clear %}
+        <div class="grey-box">
+          <p><strong>All good for {{ report_month_label }}.</strong></p>
+          <p>There are no SSL expiries coming up this month.</p>
+        </div>
+      {% else %}
+        <div class="grey-box">
+          {% if report_type == "followup" %}
+          <p><strong>Friendly follow-up for {{ report_month_label }}.</strong></p>
+          <p>{{ summary.total_action_count }} item(s) still need attention this month.</p>
+          {% else %}
+          <p><strong>Here is what is expiring in {{ report_month_label }}.</strong></p>
+          <p>{{ summary.total_action_count }} item(s) need attention this month.</p>
+          {% endif %}
+        </div>
+
+        {% for item in items %}
+        <div class="item-card">
+          <h3>{{ item.certificate_host }}</h3>
+          <p><strong>When:</strong> {{ item.expiry_date }}{% if item.days_remaining %} ({{ item.days_remaining }}){% endif %}</p>
+          <table class="route-table" role="presentation">
+            <thead>
+              <tr>
+                <th>Application</th>
+                <th>Environment</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for route in item.linked_routes %}
+              <tr>
+                <td>{{ route.app_name }}</td>
+                <td>{{ route.environment }}</td>
+                <td>{% if route.url %}<a class="cta-link" href="{{ route.url }}">{{ route.url }}</a>{% else %}Not recorded{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endfor %}
+      {% endif %}
+
+      <p>You can review the latest list any time in <a class="cta-link" href="{{ centre_url }}">EPIC.centre</a>.</p>
+      <p>Generated on {{ generated_at }}.</p>
+      <p>Thank you,</p>
+      <p><strong>EPIC.centre System</strong></p>
+    </div>
+    <div class="footer">
+      <p>This is an automated message. Please do not reply to this email.</p>
+    </div>
+  </div>
+</body>
+</html>
