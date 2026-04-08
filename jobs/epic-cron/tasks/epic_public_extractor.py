@@ -15,6 +15,13 @@ class EpicPublicExtractor:
     def do_sync(cls):
         """Perform the sync from EPIC Public to the Condition Repo."""
         current_app.logger.info(f"Starting EPIC Public Extractor at {datetime.now()}")
+        current_app.logger.info(
+            "EPIC Public extractor config summary: base_url=%s search_path=%s type_ids=%s type_map=%s",
+            current_app.config.get("EPIC_PUBLIC_BASE_URL"),
+            current_app.config.get("EPIC_PUBLIC_SEARCH_PATH", "/api/public/search"),
+            current_app.config.get("EPIC_PUBLIC_DOCUMENT_TYPE_IDS", ""),
+            current_app.config.get("EPIC_PUBLIC_DOCUMENT_TYPE_ID_MAP", ""),
+        )
 
         target_session = init_conditions_db(current_app)
 
@@ -39,6 +46,8 @@ class EpicPublicExtractor:
         failed = 0
 
         project_not_found = 0
+        project_not_found_examples = []
+        existing_examples = []
 
         with target_session() as session:
             for doc in documents:
@@ -49,6 +58,11 @@ class EpicPublicExtractor:
                     ).first()
                     if not project_exists:
                         project_not_found += 1
+                        if len(project_not_found_examples) < 10:
+                            project_not_found_examples.append({
+                                "document_id": doc["document_id"],
+                                "project_id": doc["project_id"],
+                            })
                         current_app.logger.debug(
                             f"Skipping document {doc['document_id']}: "
                             f"project {doc['project_id']} not found in Condition Repo."
@@ -61,6 +75,8 @@ class EpicPublicExtractor:
 
                     if existing:
                         skipped += 1
+                        if len(existing_examples) < 10:
+                            existing_examples.append(doc["document_id"])
                         continue
 
                     # Parse date_issued from ISO string
@@ -109,3 +125,13 @@ class EpicPublicExtractor:
             f"Document sync complete: {inserted} inserted, {skipped} skipped (existing), "
             f"{project_not_found} skipped (project not loaded), {failed} failed."
         )
+        if project_not_found_examples:
+            current_app.logger.info(
+                "Sample documents skipped because project was not loaded: %s",
+                project_not_found_examples,
+            )
+        if existing_examples:
+            current_app.logger.info(
+                "Sample existing documents skipped: %s",
+                existing_examples,
+            )
