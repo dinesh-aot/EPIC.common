@@ -14,7 +14,7 @@ class EpicPublicExtractor:
     @classmethod
     def do_sync(cls):
         """Perform the sync from EPIC Public to the Condition Repo."""
-        current_app.logger.info(f"Starting EPIC Public Extractor at {datetime.now()}")
+        current_app.logger.info(f"Starting Stepped EPIC Public Extractor at {datetime.now()}")
         current_app.logger.info(
             "EPIC Public extractor config summary: base_url=%s search_path=%s type_ids=%s type_map=%s",
             current_app.config.get("EPIC_PUBLIC_BASE_URL"),
@@ -29,7 +29,7 @@ class EpicPublicExtractor:
         current_app.logger.info(f"Fetched {len(documents)} documents from EPIC Public.")
         cls._sync_documents(documents, target_session)
 
-        current_app.logger.info(f"EPIC Public Extractor completed at {datetime.now()}")
+        current_app.logger.info(f"EPIC Public Stepped Extractor completed at {datetime.now()}")
 
     @classmethod
     def _sync_documents(cls, documents, target_session):
