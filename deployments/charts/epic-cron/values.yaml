@@ -18,6 +18,7 @@ cronTab: |
   */5 * * * * default cd /epic-cron && ./run_emailer.sh
   */5 * * * * default cd /epic-cron && ./run_centre_emailer.sh
   0 17 * * 1-5 default cd /epic-cron && ./run_approved_condition.sh
+  0 2 * * * default cd /epic-cron && ./run_epic_public_extractor.sh
 
 SUBMIT:
   database:
@@ -48,6 +49,18 @@ CENTRE:
 CONDITION:
   api:
     url: "https://condition-api-c8b80a-dev.apps.gold.devops.gov.bc.ca"
+  database:
+    host: condition-patroni
+    port: "5432"
+
+EPIC_PUBLIC:
+  baseUrl: "https://projects.eao.gov.bc.ca"
+  searchPath: "/api/public/search"
+  documentTypeIds: ""
+  documentTypeIdMap: ""
+  maxPages: ""
+  maxDocuments: ""
+  enableDetailedLogs: "false"
 
 KEYCLOAK:
   baseUrl: "https://dev.loginproxy.gov.bc.ca/auth"
@@ -75,3 +88,6 @@ secrets:
   centreDbName: "app"
   serviceAccountId: ""
   serviceAccountSecret: ""
+  conditionDbUsername: "app"
+  conditionDbPassword: ""
+  conditionDbName: "app"
