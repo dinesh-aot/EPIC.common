@@ -28,8 +28,19 @@ data:
   # Keycloak configuration
   KEYCLOAK_BASE_URL: "{{ .Values.KEYCLOAK.baseUrl }}"
   KEYCLOAK_REALM_NAME: "{{ .Values.KEYCLOAK.realmName }}"
+  # Condition database host and port
+  CONDITION_DATABASE_HOST: "{{ .Values.CONDITION.database.host }}"
+  CONDITION_DATABASE_PORT: "{{ .Values.CONDITION.database.port }}"
   # API URLs
   CONDITION_API_BASE_URL: "{{ .Values.CONDITION.api.url }}"
+  # EPIC Public configuration
+  EPIC_PUBLIC_BASE_URL: "{{ .Values.EPIC_PUBLIC.baseUrl }}"
+  EPIC_PUBLIC_SEARCH_PATH: "{{ .Values.EPIC_PUBLIC.searchPath }}"
+  EPIC_PUBLIC_DOCUMENT_TYPE_IDS: "{{ .Values.EPIC_PUBLIC.documentTypeIds }}"
+  EPIC_PUBLIC_DOCUMENT_TYPE_ID_MAP: "{{ .Values.EPIC_PUBLIC.documentTypeIdMap }}"
+  EPIC_PUBLIC_MAX_PAGES: "{{ .Values.EPIC_PUBLIC.maxPages }}"
+  EPIC_PUBLIC_MAX_DOCUMENTS: "{{ .Values.EPIC_PUBLIC.maxDocuments }}"
+  ENABLE_DETAILED_LOGS: "{{ .Values.EPIC_PUBLIC.enableDetailedLogs }}"
   # ClamAV configuration
   CLAMAV_HOST: "{{ .Values.CLAMAV.host }}"
   CLAMAV_PORT: "{{ .Values.CLAMAV.port }}"

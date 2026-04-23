@@ -205,11 +205,73 @@ spec:
                   name: {{ .Values.name }}-config
                   key: CONNECT_TIMEOUT
 
+            - name: CONDITION_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CONDITION_DATABASE_USERNAME
+            - name: CONDITION_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CONDITION_DATABASE_PASSWORD
+            - name: CONDITION_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}
+                  key: CONDITION_DATABASE_NAME
+            - name: CONDITION_DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CONDITION_DATABASE_HOST
+            - name: CONDITION_DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CONDITION_DATABASE_PORT
+
             - name: CONDITION_API_BASE_URL
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Values.name }}-config
                   key: CONDITION_API_BASE_URL
+
+            - name: EPIC_PUBLIC_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_BASE_URL
+            - name: EPIC_PUBLIC_SEARCH_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_SEARCH_PATH
+            - name: EPIC_PUBLIC_DOCUMENT_TYPE_IDS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_DOCUMENT_TYPE_IDS
+            - name: EPIC_PUBLIC_DOCUMENT_TYPE_ID_MAP
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_DOCUMENT_TYPE_ID_MAP
+            - name: EPIC_PUBLIC_MAX_PAGES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_MAX_PAGES
+            - name: EPIC_PUBLIC_MAX_DOCUMENTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: EPIC_PUBLIC_MAX_DOCUMENTS
+            - name: ENABLE_DETAILED_LOGS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: ENABLE_DETAILED_LOGS
 
             - name: CLAMAV_HOST
               valueFrom:
