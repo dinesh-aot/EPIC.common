@@ -1,6 +1,8 @@
 # PROJECT EXTRACTORS
 0 1 * * * default cd /epic-cron && ./run_project_cron_submit.sh
 0 3 * * * default cd /epic-cron && ./run_project_cron_compliance.sh
+0 4 * * * default cd /epic-cron && ./run_project_cron_condition.sh
+0 5 * * * default cd /epic-cron && ./run_epic_public_extractor.sh
 # SUBMIT EMAILER - Runs every 5 minutes
 */5 * * * * default cd /epic-cron && ./run_emailer.sh
 # CENTRE EMAILER - Runs every 5 minutes

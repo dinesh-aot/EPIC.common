@@ -1,6 +1,6 @@
 
 from flask import current_app
-from submit_api.data_classes.email_details import EmailDetails
+from epic_cron.data_classes.email_details import EmailDetails
 from submit_api.exceptions import BadRequestError
 from submit_api.models import AccountProject
 from submit_api.models.account_user import AccountUser as AccountUserModel
@@ -59,7 +59,7 @@ class PackageSubmissionEmailService:  # pylint: disable=too-few-public-methods
                 'project_name': project.name,
                 'submitter_name': submitter.full_name,
                 'submission_date': convert_utc_to_local_str(package.submitted_on),
-                'certificate_holder_name': project.proponent_name,
+                'certificate_holder_name': project.proponent.name if project.proponent else '',
                 'package_name': package.name,
                 'documents': [submission.submitted_document.name for submission in document_submissions]
             },
@@ -122,7 +122,7 @@ class PackageSubmissionEmailService:  # pylint: disable=too-few-public-methods
             if user and getattr(user, 'staff_user', None) and user.staff_user:
                 return user.staff_user.full_name or entry.updated_by
             return entry.updated_by
-        return 'A team member'
+        return 'a team member'
 
     @staticmethod
     def get_email_sender_for_package_type(package_type: str) -> str:

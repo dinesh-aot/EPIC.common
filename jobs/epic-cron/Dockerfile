@@ -44,7 +44,12 @@ COPY ./requirements.txt .
 COPY ./requirements/ ./requirements/
 
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# The editable repo libraries currently have incompatible transitive pins. Install
+# the cron image dependency set first, then install the repo libraries themselves
+# without re-resolving their install_requires.
+RUN sed '/^-e git+/d' requirements.txt > /tmp/requirements-no-repos.txt \
+    && pip install --no-cache-dir -r /tmp/requirements-no-repos.txt \
+    && pip install --no-cache-dir --no-deps -r requirements/repo-libraries.txt
 
 # Copy the rest of the application after pip install to avoid conflicts with git dependencies
 COPY . .
