@@ -1,5 +1,7 @@
 """Initializations for db and marshmallow."""
 
+from contextlib import contextmanager
+
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
@@ -22,6 +24,19 @@ def create_session(engine_uri):
         pool_recycle=3600
     )
     return sessionmaker(bind=engine)
+
+
+@contextmanager
+def session_scope(session_factory):
+    """Create a session, rollback on failure, and always close it."""
+    session = session_factory()
+    try:
+        yield session
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 def init_track_db(app):
@@ -54,6 +69,12 @@ def init_submit_db(app):
     # db is already initialized as a global singleton
     # Just return it for use within the app context
     return db
+
+
+def init_submit_session(app):
+    """Initialize a session factory for the Submit database."""
+    print("Initializing Submit database session...")
+    return create_session(app.config['SUBMIT_DATABASE_URI'])
 
 
 # Aliases for backward compatibility
