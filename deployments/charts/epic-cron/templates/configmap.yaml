@@ -23,6 +23,7 @@ data:
   # SUBMIT configuration
   WEB_URL: "{{ .Values.SUBMIT.web.url }}"
   SENDER_EMAIL: "{{ .Values.SUBMIT.sender.email }}"
+  CENTRE_SENDER_EMAIL: "{{ .Values.CENTRE.senderEmail }}"
   STAFF_SUPPORT_MAIL_ID: "{{ .Values.SUBMIT.staffSupportMailId }}"
   SIGNUP_URL_PATH: "{{ .Values.SUBMIT.signupUrlPath }}"
   # Keycloak configuration

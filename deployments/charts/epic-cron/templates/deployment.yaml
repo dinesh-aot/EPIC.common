@@ -168,6 +168,11 @@ spec:
                 configMapKeyRef:
                   name: {{ .Values.name }}-config
                   key: SENDER_EMAIL
+            - name: CENTRE_SENDER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: CENTRE_SENDER_EMAIL
             - name: STAFF_SUPPORT_MAIL_ID
               valueFrom:
                 configMapKeyRef:

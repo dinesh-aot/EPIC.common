@@ -72,7 +72,7 @@ def run_pending_access_reminder(repository: AccessRequestRepository) -> bool:
     hours = current_app.config.get("PENDING_ACCESS_REMINDER_HOURS", 48)
     recipient = (current_app.config.get("PENDING_ACCESS_REMINDER_EMAIL") or "").strip()
     base_url = (current_app.config.get("REQUEST_ACCESS_BASE_URL") or "").strip()
-    sender = current_app.config.get("SENDER_EMAIL") or ""
+    sender = current_app.config.get("CENTRE_SENDER_EMAIL") or ""
 
     if not recipient:
         logger.warning(
@@ -80,7 +80,7 @@ def run_pending_access_reminder(repository: AccessRequestRepository) -> bool:
         )
         return False
     if not sender:
-        raise BadRequestError("SENDER_EMAIL is not configured")
+        raise BadRequestError("CENTRE_SENDER_EMAIL is not configured")
 
     pending = repository.find_pending_older_than_hours(hours)
     if not pending:
