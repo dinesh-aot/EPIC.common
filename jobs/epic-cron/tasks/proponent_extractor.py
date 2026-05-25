@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import current_app
 from epic_cron.models.db import init_submit_session, session_scope
-from epic_cron.models.external.submit import SubmitProponent
+from epic_cron.models.external.submit_v2 import SubmitProponentV2
 from epic_cron.services.track_service import TrackService
 
 
@@ -18,7 +18,7 @@ class ProponentExtractor:
         submit_session = init_submit_session(current_app)
 
         proponents_data = TrackService.fetch_proponents()
-        cls._sync_proponents(proponents_data, submit_session, SubmitProponent)
+        cls._sync_proponents(proponents_data, submit_session, SubmitProponentV2)
 
         print(f"Proponent Extractor completed at {datetime.now()}")
 
@@ -28,13 +28,13 @@ class ProponentExtractor:
         Synchronizes proponents between Source (Track) and Target (Submit).
         Strategy: Upsert (Insert/Update) + Soft Delete.
         """
-        print(f"Syncing proponents into the SUBMIT database...")
+        print("Syncing proponents into the SUBMIT database...")
 
         with session_scope(target_session) as session:
             try:
                 # Load all existing proponents to minimize DB round-trips
                 existing_proponents = {p.id: p for p in session.query(target_model).all()}
-                
+
                 source_ids = set()
                 count_updated = 0
                 count_created = 0
@@ -44,9 +44,9 @@ class ProponentExtractor:
                     data = dict(row._mapping)
                     proponent_id = data["id"]
                     proponent_name = data["name"]
-                    
+
                     source_ids.add(proponent_id)
-                    
+
                     existing_record = existing_proponents.get(proponent_id)
 
                     if existing_record:
@@ -74,9 +74,9 @@ class ProponentExtractor:
                         count_deleted += 1
 
                 session.commit()
-                
+
                 print(f"Sync Complete: {count_created} Created, {count_updated} Updated, {count_deleted} Soft-Deleted.")
-                
+
             except Exception as e:
                 session.rollback()
                 print(f"*** ERROR SYNCING PROPONENTS: {e} ***")
