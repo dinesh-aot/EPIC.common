@@ -56,8 +56,7 @@ CONDITION:
 EPIC_PUBLIC:
   baseUrl: "https://projects.eao.gov.bc.ca"
   searchPath: "/api/public/search"
-  documentTypeIds: ""
-  documentTypeIdMap: ""
+  documentTypeMap: ""
   maxPages: ""
   maxDocuments: ""
   enableDetailedLogs: "false"

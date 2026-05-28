@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from epic_cron.models.external.condition_document import Document as ConditionDocumentModel
+from epic_cron.models.external.condition_document_type import DocumentType as ConditionDocumentTypeModel
 from epic_cron.models.external.condition_project import Project as ConditionProjectModel
 from flask import current_app
 
@@ -16,20 +17,53 @@ class EpicPublicExtractor:
         """Perform the sync from EPIC Public to the Condition Repo."""
         current_app.logger.info(f"Starting Stepped EPIC Public Extractor at {datetime.now()}")
         current_app.logger.info(
-            "EPIC Public extractor config summary: base_url=%s search_path=%s type_ids=%s type_map=%s",
+            "EPIC Public extractor config summary: base_url=%s search_path=%s type_map=%s",
             current_app.config.get("EPIC_PUBLIC_BASE_URL"),
             current_app.config.get("EPIC_PUBLIC_SEARCH_PATH", "/api/public/search"),
-            current_app.config.get("EPIC_PUBLIC_DOCUMENT_TYPE_IDS", ""),
-            current_app.config.get("EPIC_PUBLIC_DOCUMENT_TYPE_ID_MAP", ""),
+            current_app.config.get("EPIC_PUBLIC_DOCUMENT_TYPE_MAP", ""),
         )
 
         target_session = init_conditions_db(current_app)
 
-        documents = EpicPublicService.fetch_all_documents()
+        source_type_to_document_type_id = cls._resolve_document_type_config(target_session)
+
+        documents = EpicPublicService.fetch_all_documents(
+            document_type_id_map=source_type_to_document_type_id,
+        )
         current_app.logger.info(f"Fetched {len(documents)} documents from EPIC Public.")
         cls._sync_documents(documents, target_session)
 
         current_app.logger.info(f"EPIC Public Stepped Extractor completed at {datetime.now()}")
+
+    @classmethod
+    def _resolve_document_type_config(cls, target_session):
+        """Resolve configured Condition document type names to database IDs once per run."""
+        source_type_to_target_name = EpicPublicService.get_document_type_name_map()
+        target_type_names = list(source_type_to_target_name.values())
+        target_name_to_id = cls._get_document_type_ids_by_name(
+            target_session,
+            target_type_names,
+        )
+        source_type_to_target_id = {
+            source_type_id: target_name_to_id[target_name]
+            for source_type_id, target_name in source_type_to_target_name.items()
+        }
+
+        current_app.logger.info(
+            "Resolved EPIC Public target document types: mapped_type_count=%s",
+            len(source_type_to_target_id),
+        )
+        return source_type_to_target_id
+
+    @classmethod
+    def _get_document_type_ids_by_name(cls, target_session, document_type_names):
+        """Look up Condition document_types.id values by exact document_type names."""
+        with session_scope(target_session) as session:
+            rows = session.query(ConditionDocumentTypeModel).filter(
+                ConditionDocumentTypeModel.document_type.in_(document_type_names)
+            ).all()
+
+        return {row.document_type: row.id for row in rows}
 
     @classmethod
     def _sync_documents(cls, documents, target_session):
