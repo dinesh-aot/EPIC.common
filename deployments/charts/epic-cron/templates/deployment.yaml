@@ -242,6 +242,12 @@ spec:
                   name: {{ .Values.name }}-config
                   key: CONDITION_API_BASE_URL
 
+            - name: SUBMIT_API_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.name }}-config
+                  key: SUBMIT_API_BASE_URL
+
             - name: EPIC_PUBLIC_BASE_URL
               valueFrom:
                 configMapKeyRef:

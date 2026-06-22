@@ -116,6 +116,9 @@ class _Config():  # pylint: disable=too-few-public-methods
     SERVICE_ACCOUNT_ID = os.getenv('SERVICE_ACCOUNT_ID')
     SERVICE_ACCOUNT_SECRET = os.getenv('SERVICE_ACCOUNT_SECRET')
     CONNECT_TIMEOUT = int(os.getenv('CONNECT_TIMEOUT', 60))
+    
+    # Submit API Configuration
+    SUBMIT_API_BASE_URL = os.getenv('SUBMIT_API_BASE_URL')
     # TODO separate out clients for APIs and user management.
     # TODO API client wont need user management roles in keycloak.
 
