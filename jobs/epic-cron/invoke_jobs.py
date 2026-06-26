@@ -18,6 +18,7 @@ from tasks.virus_scanner import VirusScanner
 from tasks.submit_mail import SubmitMailer
 from tasks.centre_mail import CentreMailer
 from tasks.sync_approved_condition import SyncApprovedCondition
+from tasks.sync_staff_work_role import SyncStaffWorkRole
 from tasks.work_extractor import WorkExtractor
 from tasks.phase_extractor import PhaseExtractor
 from tasks.epic_public_extractor import EpicPublicExtractor
@@ -127,6 +128,10 @@ def run(
             application.logger.info(f'Starting Approved Condition Sync At {datetime.now()}')
             SyncApprovedCondition.sync_approved_condition()
             application.logger.info('Completed Sync Approved Condition')
+        elif job_name == 'SYNC_STAFF_WORK_ROLE':
+            application.logger.info(f'Starting Staff Work Role Sync At {datetime.now()}')
+            SyncStaffWorkRole.sync_staff_work_roles()
+            application.logger.info('Completed Staff Work Role Sync')
         elif job_name == 'PENDING_ACCESS_REMINDER':
             from tasks.pending_access_reminder import PendingAccessReminder
             PendingAccessReminder.run()
@@ -186,6 +191,9 @@ if __name__ == "__main__":
 
     elif job_type == "SYNC_CONDITION":
         run("SYNC_CONDITION")
+
+    elif job_type == "SYNC_STAFF_WORK_ROLE":
+        run("SYNC_STAFF_WORK_ROLE")
 
     elif job_type == "EXTRACT_WORK":
         try:

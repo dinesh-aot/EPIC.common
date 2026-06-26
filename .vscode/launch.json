@@ -93,6 +93,16 @@
             "args": ["EXTRACT_PHASE"],
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+         {
+            "name": "EPIC CRON - Sync Staff Work Role",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "request": "launch",
+            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "args": ["SYNC_STAFF_WORK_ROLE"],
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }

@@ -34,6 +34,7 @@ data:
   CONDITION_DATABASE_PORT: "{{ .Values.CONDITION.database.port }}"
   # API URLs
   CONDITION_API_BASE_URL: "{{ .Values.CONDITION.api.url }}"
+  SUBMIT_API_BASE_URL: "{{ .Values.SUBMIT.api.url }}"
   # EPIC Public configuration
   EPIC_PUBLIC_BASE_URL: "{{ .Values.EPIC_PUBLIC.baseUrl }}"
   EPIC_PUBLIC_SEARCH_PATH: "{{ .Values.EPIC_PUBLIC.searchPath }}"

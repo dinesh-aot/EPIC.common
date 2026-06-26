@@ -185,6 +185,7 @@ class KeycloakService:
         response = KeycloakService._request_keycloak(f"groups/{group_id}/members")
         return response.json()
 
+
     @classmethod
     def get_eao_manager_emails(cls) -> list:
         """Return email addresses of SUBMIT/EAO_MANAGER group members (same as submit-api flow)."""
