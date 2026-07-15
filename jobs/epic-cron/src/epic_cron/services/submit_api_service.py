@@ -138,7 +138,7 @@ class SubmitApiService:
         if not submit_api_url:
             raise ValueError("SUBMIT_API_BASE_URL not configured")
         
-        url = f"{submit_api_url}/api/staff-user-works"
+        url = f"{submit_api_url}/api/staff-user-works/remove"
         timeout = int(current_app.config.get("CONNECT_TIMEOUT", 60))
         headers = SubmitApiService._get_headers()
         

@@ -7,102 +7,152 @@
         {
             "name": "EPIC CRON - Extract Project (SUBMIT)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
-            "args": ["SUBMIT"],
+            "program": "invoke_jobs.py",
+            "args": ["SUBMIT", "v2"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Extract Project (COMPLIANCE)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["COMPLIANCE"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Extract Project (CONDITIONS)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["CONDITIONS"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Email (SUBMIT)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["EMAIL", "SUBMIT"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Email (CENTRE)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["EMAIL", "CENTRE"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Sync Approved Condition",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["SYNC_CONDITION"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Scan Virus (Specify File Path)",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["SCAN_VIRUS", "/path/to/file"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Extract Work",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["EXTRACT_WORK"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
         {
             "name": "EPIC CRON - Extract Phase",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["EXTRACT_PHASE"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         },
-         {
+        {
             "name": "EPIC CRON - Sync Staff Work Role",
             "type": "debugpy",
-            "cwd": "${workspaceFolder}/jobs/epic-cron/",
+            "cwd": "${workspaceFolder}/jobs/epic-cron",
             "request": "launch",
-            "program": "${workspaceFolder}/jobs/epic-cron/invoke_jobs.py",
+            "program": "invoke_jobs.py",
             "args": ["SYNC_STAFF_WORK_ROLE"],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/jobs/epic-cron/.env",
+            "env": {
+                "FLASK_ENV": "development",
+                "PYTHONPATH": "${workspaceFolder}/jobs/epic-cron/src"
+            }
         }
     ]
 }
