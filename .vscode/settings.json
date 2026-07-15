@@ -1,0 +1,3 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/jobs/epic-cron/venv/Scripts/python.exe"
+}
