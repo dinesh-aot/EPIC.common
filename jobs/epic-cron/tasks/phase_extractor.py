@@ -76,7 +76,6 @@ class PhaseExtractor:
                             existing_phase.sort_order = phase_dict.get("sort_order")
                             existing_phase.number_of_days = phase_dict.get("number_of_days")
                             existing_phase.legislated = phase_dict.get("legislated", False)
-                            existing_phase.enable_submit = False
                             existing_phase.is_active = phase_dict.get("is_active", True)
                             existing_phase.is_deleted = phase_dict.get("is_deleted", False)
                             existing_phase.updated_date = datetime.utcnow()
