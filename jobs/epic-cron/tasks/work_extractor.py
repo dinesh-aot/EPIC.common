@@ -64,6 +64,7 @@ class WorkExtractor:
                         if work_dict.get("is_deleted", False):
                             existing_work.is_deleted = True
                             existing_work.is_active = False
+                            existing_work.contact_email = work_dict.get("contact_email")
                             existing_work.updated_date = datetime.utcnow()
                             existing_work.updated_by = work_dict.get("updated_by", "cronjob")
                             session.commit()
@@ -74,6 +75,7 @@ class WorkExtractor:
                             existing_work.current_phase_id = work_dict.get("current_phase_id")
                             existing_work.work_state = work_dict.get("work_state")
                             existing_work.title = work_dict.get("title")
+                            existing_work.contact_email = work_dict.get("contact_email")
                             existing_work.is_active = work_dict.get("is_active", True)
                             existing_work.is_deleted = work_dict.get("is_deleted", False)
                             existing_work.updated_date = datetime.utcnow()
@@ -89,6 +91,7 @@ class WorkExtractor:
                             current_phase_id=work_dict.get("current_phase_id"),
                             work_state=work_dict.get("work_state"),
                             title=work_dict.get("title"),
+                            contact_email=work_dict.get("contact_email"),
                             is_active=work_dict.get("is_active", True),
                             is_deleted=work_dict.get("is_deleted", False),
                             created_date=datetime.utcnow(),

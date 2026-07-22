@@ -81,9 +81,10 @@ class TrackService:
             projects_table = Table('projects', track_metadata, autoload_with=session.bind)
             work_types_table = Table('work_types', track_metadata, autoload_with=session.bind)
             work_phases_table = Table('work_phases', track_metadata, autoload_with=session.bind)
+            staffs_table = Table('staffs', track_metadata, autoload_with=session.bind)
 
-            current_app.logger.info("Selecting works with project, work type, and phase information...")
-            # Query works and join with projects, work_types, and work_phases to generate title and get phase_id
+            current_app.logger.info("Selecting works with project, work type, phase, and work lead information...")
+            # Query works and join with projects, work_types, work_phases, and staffs to generate title and get phase_id and work lead email
             query = (
                 select(
                     works_table.c.id,
@@ -94,7 +95,8 @@ class TrackService:
                     works_table.c.is_deleted,
                     projects_table.c.name.label("project_name"),
                     work_types_table.c.name.label("work_type_name"),
-                    work_phases_table.c.phase_id.label("current_phase_id")
+                    work_phases_table.c.phase_id.label("current_phase_id"),
+                    staffs_table.c.email.label("work_lead_email")
                 )
                 .join(
                     projects_table,
@@ -107,6 +109,10 @@ class TrackService:
                 .outerjoin(
                     work_phases_table,
                     works_table.c.current_work_phase_id == work_phases_table.c.id
+                )
+                .outerjoin(
+                    staffs_table,
+                    works_table.c.work_lead_id == staffs_table.c.id
                 )
             )
             
@@ -134,6 +140,7 @@ class TrackService:
                     "current_phase_id": row_dict.get("current_phase_id"),
                     "work_state": row_dict.get("work_state"),
                     "title": generated_title,
+                    "contact_email": row_dict.get("work_lead_email"),
                     "is_active": row_dict.get("is_active", True),
                     "is_deleted": row_dict.get("is_deleted", False),
                     "created_by": "cronjob",
