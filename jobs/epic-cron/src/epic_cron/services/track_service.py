@@ -83,8 +83,8 @@ class TrackService:
             work_phases_table = Table('work_phases', track_metadata, autoload_with=session.bind)
             staffs_table = Table('staffs', track_metadata, autoload_with=session.bind)
 
-            current_app.logger.info("Selecting works with project, work type, phase, and work lead information...")
-            # Query works and join with projects, work_types, work_phases, and staffs to generate title and get phase_id and work lead email
+            current_app.logger.info("Selecting works with project, work type, phase, and responsible EPD information...")
+            # Query works and join with projects, work_types, work_phases, and staffs to generate title and get phase_id and responsible EPD email
             query = (
                 select(
                     works_table.c.id,
@@ -96,7 +96,7 @@ class TrackService:
                     projects_table.c.name.label("project_name"),
                     work_types_table.c.name.label("work_type_name"),
                     work_phases_table.c.phase_id.label("current_phase_id"),
-                    staffs_table.c.email.label("work_lead_email")
+                    staffs_table.c.email.label("responsible_epd_email")
                 )
                 .join(
                     projects_table,
@@ -112,7 +112,7 @@ class TrackService:
                 )
                 .outerjoin(
                     staffs_table,
-                    works_table.c.work_lead_id == staffs_table.c.id
+                    works_table.c.responsible_epd_id == staffs_table.c.id
                 )
             )
             
@@ -140,7 +140,7 @@ class TrackService:
                     "current_phase_id": row_dict.get("current_phase_id"),
                     "work_state": row_dict.get("work_state"),
                     "title": generated_title,
-                    "contact_email": row_dict.get("work_lead_email"),
+                    "contact_email": row_dict.get("responsible_epd_email"),
                     "is_active": row_dict.get("is_active", True),
                     "is_deleted": row_dict.get("is_deleted", False),
                     "created_by": "cronjob",
