@@ -29,7 +29,7 @@ SUBMIT:
   sender:
     email: "EAO.ManagementPlanSupport@gov.bc.ca"
   staffSupportMailId: ""
-  signupUrlPath: "/proponent/registration"
+  signupUrlPath: "/proponent/account-registration"
 
 COMPLIANCE:
   database:
