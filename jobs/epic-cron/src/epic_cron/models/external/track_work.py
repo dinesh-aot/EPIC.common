@@ -22,5 +22,6 @@ class TrackWork(Base):
     is_deleted = Column(Boolean, default=False, nullable=False)
     created_date = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_date = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=True)
+    contact_email = Column(String(250), nullable=True)
     created_by = Column(String(100), nullable=True)
     updated_by = Column(String(100), nullable=True)
