@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EPIC.submit file rejected by security check</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #ffffff; padding: 20px; }
+    .container { max-width: 600px; margin: auto; padding: 20px; }
+    .logo { margin-bottom: 20px; }
+    .logo img { max-width: 220px; height: auto; }
+    .content { color: #333333; font-size: 16px; line-height: 1.6; }
+    .footer { color: #666666; font-size: 12px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% include "submit/shared/_header.html" %}
+    <div class="content">
+      <p>Hello,</p>
+      <p>
+        A file uploaded to EPIC.submit was rejected by a security check and is no longer
+        available to users.
+      </p>
+      <p><strong>Submission:</strong> {{ package_name }}</p>
+      <p><strong>File:</strong> {{ file_name }}</p>
+      <p><strong>Document ID:</strong> {{ document_id }}</p>
+      <p><strong>Uploader email:</strong> {{ uploader_email or "Not available" }}</p>
+      <p>Please contact the uploader if they need to submit a replacement file.</p>
+      <p>Best regards,</p>
+      {% include "submit/shared/_signature.html" %}
+      {% include "submit/shared/_footer_staff.html" %}
+    </div>
+  </div>
+</body>
+</html>
