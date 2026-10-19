@@ -123,12 +123,13 @@ class SubmitApiService:
             raise
 
     @staticmethod
-    def delete_staff_user_work(work_id: int):
+    def delete_staff_user_work(work_id: int, email: str):
         """
-        Delete (deactivate) a staff user work via Submit API.
+        Delete (deactivate) a single staff user work via Submit API.
         
         Args:
             work_id: Work ID from EPIC.track
+            email: Email address of the staff user to remove from the work
         
         Returns:
             Response data from the API
@@ -140,12 +141,17 @@ class SubmitApiService:
         url = f"{submit_api_url}/api/staff-user-works/work/{work_id}"
         timeout = int(current_app.config.get("CONNECT_TIMEOUT", 60))
         headers = SubmitApiService._get_headers()
+        params = {"email": email}
         
         try:
-            current_app.logger.debug(f"Deleting staff user work: work_id={work_id}")
-            response = requests.delete(url, headers=headers, timeout=timeout)
+            current_app.logger.debug(
+                f"Deleting staff user work: work_id={work_id}, email={email}"
+            )
+            response = requests.delete(url, headers=headers, params=params, timeout=timeout)
             response.raise_for_status()
-            current_app.logger.info(f"Successfully deleted staff user work: work_id={work_id}")
+            current_app.logger.info(
+                f"Successfully deleted staff user work: work_id={work_id}, email={email}"
+            )
             return response.json()
         except Exception as e:
             current_app.logger.error(f"Failed to delete staff user work: {e}")

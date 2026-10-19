@@ -200,7 +200,8 @@ class StaffWorkRoleSyncService:
                     f"Delete: email={email}, work_id={work_id}"
                 )
                 SubmitApiService.delete_staff_user_work(
-                    work_id=work_id
+                    work_id=work_id,
+                    email=email
                 )
                 deleted_count += 1
             except Exception as e:
