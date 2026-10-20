@@ -25,6 +25,51 @@ class SubmitProjectV2(Base):
     has_approved_condition = Column(Boolean, default=False, nullable=False)
 
 
+class SubmitAccountProjectV2(Base):
+    """Submit v2 account project mapping (account_projects table).
+
+    Links an account to a project; used to determine which projects have been
+    onboarded by an account and therefore require report syncing.
+    """
+
+    __tablename__ = "account_projects"
+
+    id = Column(Integer, primary_key=True)
+    account_id = Column(Integer, nullable=False)
+    project_id = Column(Integer, nullable=False)
+
+
+class SubmitProjectReportV2(Base):
+    """Submit v2 project report mapping (project_reports table).
+
+    Flat table holding one row per approved report phase synced from the
+    condition repository.
+    """
+
+    __tablename__ = "project_reports"
+
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, nullable=False)
+    report_id = Column(Integer, nullable=False)
+    condition_number = Column(Integer, nullable=True)
+    condition_subsection = Column(String, nullable=True)
+    report_type = Column(String, nullable=True)
+    report_sub_type = Column(String, nullable=True)
+    report_name = Column(String, nullable=True)
+    phase = Column(String, nullable=True)
+    frequency = Column(String, nullable=True)
+    timing = Column(String, nullable=True)
+    management_plan = Column(String, nullable=True)
+    display_name = Column(String, nullable=True)
+    created_date = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_date = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=True,
+    )
+
+
 class SubmitProponentV2(Base):
     """Submit v2 proponent mapping."""
 

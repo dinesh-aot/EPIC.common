@@ -11,6 +11,8 @@
 */5 * * * * default cd /epic-cron && ./run_centre_emailer.sh
 # SYNC APPROVED CONDITION - Runs at 5pm on weekdays
 0 17 * * 1-5 default cd /epic-cron && ./run_approved_condition.sh
+# SYNC REPORTS - Runs daily at midnight
+0 0 * * * default cd /epic-cron && ./run_sync_report.sh
 # SYNC STAFF WORK ROLE - Runs daily at midnight
 0 0 * * * default cd /epic-cron && ./run_staff_work_role_sync.sh
 # DEACTIVATE INACTIVE USERS - Runs daily overnight (07:00 UTC ~ midnight Pacific)

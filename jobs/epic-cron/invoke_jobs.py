@@ -18,6 +18,7 @@ from tasks.virus_scanner import VirusScanner
 from tasks.submit_mail import SubmitMailer
 from tasks.centre_mail import CentreMailer
 from tasks.sync_approved_condition import SyncApprovedCondition
+from tasks.sync_report import SyncReport
 from tasks.sync_staff_work_role import SyncStaffWorkRole
 from tasks.work_extractor import WorkExtractor
 from tasks.phase_extractor import PhaseExtractor
@@ -135,6 +136,10 @@ def run(
             application.logger.info(f'Starting Approved Condition Sync At {datetime.now()}')
             SyncApprovedCondition.sync_approved_condition()
             application.logger.info('Completed Sync Approved Condition')
+        elif job_name == 'SYNC_REPORT':
+            application.logger.info(f'Starting Report Sync At {datetime.now()}')
+            SyncReport.sync_report()
+            application.logger.info('Completed Sync Report')
         elif job_name == 'SYNC_STAFF_WORK_ROLE':
             application.logger.info(f'Starting Staff Work Role Sync At {datetime.now()}')
             SyncStaffWorkRole.sync_staff_work_roles()
@@ -189,7 +194,7 @@ if __name__ == "__main__":
     if not args:
         logger.error(
             "You must provide a job type: "
-            "SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/PENDING_ACCESS_REMINDER/"
+            "SUBMIT/COMPLIANCE/EMAIL/SYNC_CONDITION/SYNC_REPORT/PENDING_ACCESS_REMINDER/"
             "SCAN_VIRUS/SCAN_SUBMIT_DOCUMENTS/EXTRACT_WORK/EXTRACT_PHASE/CHECK_SSL"
         )
         sys.exit(1)
@@ -203,6 +208,9 @@ if __name__ == "__main__":
 
     elif job_type == "SYNC_CONDITION":
         run("SYNC_CONDITION")
+
+    elif job_type == "SYNC_REPORT":
+        run("SYNC_REPORT")
 
     elif job_type == "SYNC_STAFF_WORK_ROLE":
         run("SYNC_STAFF_WORK_ROLE")
@@ -251,8 +259,8 @@ if __name__ == "__main__":
         except ValueError:
             logger.error(
                 f"Invalid job type '{job_type}'. Must be one of: "
-                "SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SCAN_VIRUS, SCAN_SUBMIT_DOCUMENTS, "
-                "EXTRACT_WORK, EXTRACT_PHASE, CHECK_SSL"
+                "SUBMIT, COMPLIANCE, EMAIL, SYNC_CONDITION, SYNC_REPORT, SCAN_VIRUS, "
+                "SCAN_SUBMIT_DOCUMENTS, EXTRACT_WORK, EXTRACT_PHASE, CHECK_SSL"
             )
             sys.exit(1)
 
