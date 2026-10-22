@@ -11,7 +11,9 @@ from epic_cron.models.external.submit_v2 import (
     USER_TYPE_STAFF,
     Base,
 )
+from epic_cron.models.external.submit_v2 import SubmitAccountProjectV2 as SubmitAccountProject
 from epic_cron.models.external.submit_v2 import SubmitAccountUserV2 as SubmitAccountUser
+from epic_cron.models.external.submit_v2 import SubmitProjectReportV2 as SubmitProjectReport
 from epic_cron.models.external.submit_v2 import SubmitProjectV2 as SubmitProject
 from epic_cron.models.external.submit_v2 import SubmitProponentV2 as SubmitProponent
 from epic_cron.models.external.submit_v2 import SubmitUserV2 as SubmitUser
@@ -23,6 +25,8 @@ __all__ = [
     "SubmitProponent",
     "SubmitUser",
     "SubmitAccountUser",
+    "SubmitAccountProject",
+    "SubmitProjectReport",
     "USER_TYPE_PROPONENT",
     "USER_TYPE_STAFF",
     "USER_STATUS_ACTIVE",
